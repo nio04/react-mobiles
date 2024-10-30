@@ -21,7 +21,8 @@ return new class extends Migration {
             $table->string('os');
             $table->string('ram');
             $table->string('storage');
-            $table->string('status'); // available or unavailable            
+            $table->string('status'); // available or unavailable
+            $table->string("cover")->nullable();
             $table->timestamps();
         });
     }

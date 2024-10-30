@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder {
                 'ram' => fake()->randomElement(['2 GB', '4 GB', '6 GB', '8 GB', '12 GB']),
                 'storage' => fake()->randomElement(['32 GB', '64 GB', '128 GB', '256 GB']),
                 'status' => fake()->randomElement(['available', 'unavailable']),
+                'cover' => 'https://picsum.photos/seed/' . fake()->numberBetween(1, 1000) . '/400/300',
+
             ];
         }
 
