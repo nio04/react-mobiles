@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laravel with React</title>
     @viteReactRefresh
-    @vite("resources/js/index.js")
+    @vite("resources/js/index.jsx")
   </head>
 
   <body>
