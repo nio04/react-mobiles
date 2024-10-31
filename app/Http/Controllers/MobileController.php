@@ -6,11 +6,23 @@ use App\Models\Mobile;
 use Illuminate\Http\Request;
 
 class MobileController extends Controller {
+    protected $perPage = 20;
     /**
      * Display a listing of the resource.
      */
-    public function index() {
-        return Mobile::simplePaginate(100);
+    public function index(Request $request) {
+        $query = $request->input("query");
+        $showItems = $request->input("showItems");
+
+        if ($query) {
+            return Mobile::where("name", "like", "%" . $query . "%")->simplePaginate($this->perPage);
+        }
+
+        if ($showItems) {
+            return Mobile::latest()->simplePaginate($showItems);
+        }
+
+        return Mobile::latest()->simplePaginate($this->perPage);
     }
 
     /**

@@ -1,4 +1,8 @@
-export default function Nav() {
+export default function Nav({ onSetMobiles, onSetQuery }) {
+    function handleSubmit(e) {
+        e.preventDefault();
+        onSetMobiles();
+    }
     return (
         <>
             <nav className="flex items-center justify-end h-10 col-start-1 col-end-13 pr-10 bg-gray-300">
@@ -6,16 +10,15 @@ export default function Nav() {
                     action="#"
                     method="POST"
                     className="flex items-center justify-center gap-4"
+                    onSubmit={handleSubmit}
                 >
-                    <div>
-                        <input
-                            type="text"
-                            name="search"
-                            id="search"
-                            placeholder="Enter Device Name"
-                        />
-                    </div>
-                    <input type="submit" value="search" />
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        onChange={(e) => onSetQuery(e)}
+                        placeholder="Enter Device Name"
+                    />
                 </form>
             </nav>
         </>

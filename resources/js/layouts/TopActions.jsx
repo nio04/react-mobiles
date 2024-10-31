@@ -1,4 +1,4 @@
-export default function TopActions() {
+export default function TopActions({ showItems, onSetShowItems }) {
     return (
         <>
             <section className="flex items-center justify-end gap-4 py-3 pr-5">
@@ -22,6 +22,8 @@ export default function TopActions() {
                     <select
                         name="show"
                         id="show"
+                        value={showItems}
+                        onChange={(e) => onSetShowItems(e.target.value)}
                         className="w-16 cursor-pointer"
                     >
                         <option value="20">20</option>

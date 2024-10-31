@@ -1,28 +1,20 @@
 import TopActions from "./TopActions";
 import Paginate from "./Paginate";
-import { useEffect, useState } from "react";
+import Item from "../components/Item";
 
-export default function Main() {
-    const [mobiles, setMobiles] = useState([]);
-    useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/mobiles")
-            .then((res) => res.json())
-            .then((data) => setMobiles(data.data));
-    }, []);
+export default function Main({ mobiles, showItems, onSetShowItems }) {
     return (
         <>
             <section className="flex h-[630px] flex-col w-full bg-gray-400">
-                <TopActions />
+                <TopActions
+                    showItems={showItems}
+                    onSetShowItems={onSetShowItems}
+                />
 
-                <section className="bg-green-300 h-[1550px] overflow-y-scroll p-6">
+                <section className="bg-gray-100 h-[1550px] overflow-y-scroll p-6 border border-gray-500">
                     <ul className="grid grid-cols-4 gap-4">
                         {mobiles.map((mobile) => (
-                            <li
-                                key={mobile.id}
-                                className="bg-green-600 h-72 w-72"
-                            >
-                                {mobile.name}
-                            </li>
+                            <Item key={mobile.id} mobile={mobile} />
                         ))}
                     </ul>
                 </section>
