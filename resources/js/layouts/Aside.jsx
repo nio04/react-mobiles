@@ -2,6 +2,11 @@ export default function Aside({
     brandListings,
     chipsetListings,
     displayTypeListings,
+    marketStatusListings,
+    networkTypeListings,
+    osListings,
+    ramListings,
+    storageListings,
 }) {
     return (
         <>
@@ -356,7 +361,7 @@ export default function Aside({
                     </h4>
                     <ul className="pl-2">
                         {displayTypeListings.map(({ display_type }) => (
-                            <li className="flex gap-2">
+                            <li key={display_type} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="display_type"
@@ -377,79 +382,25 @@ export default function Aside({
                 {/* Market Status */}
                 <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
-                        market status
+                        Market Status
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="status"
-                                id="status_available"
-                                value="available"
-                            />
-                            <label
-                                htmlFor="status_available"
-                                className="text-gray-600 capitalize"
-                            >
-                                available
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="status"
-                                id="status_not_available"
-                                value="not available"
-                            />
-                            <label
-                                htmlFor="status_not_available"
-                                className="text-gray-600 capitalize"
-                            >
-                                not available
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="status"
-                                id="status_official"
-                                value="official"
-                            />
-                            <label
-                                htmlFor="status_official"
-                                className="text-gray-600 capitalize"
-                            >
-                                official
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="status"
-                                id="status_unofficial"
-                                value="unofficial"
-                            />
-                            <label
-                                htmlFor="status_unofficial"
-                                className="text-gray-600 capitalize"
-                            >
-                                unofficial
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="status"
-                                id="status_upcoming"
-                                value="upcoming"
-                            />
-                            <label
-                                htmlFor="status_upcoming"
-                                className="text-gray-600 capitalize"
-                            >
-                                upcoming
-                            </label>
-                        </li>
+                        {marketStatusListings.map(({ status }) => (
+                            <li key={status} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="status"
+                                    id={status}
+                                    value={status}
+                                />
+                                <label
+                                    htmlFor={status}
+                                    className="text-gray-600 capitalize"
+                                >
+                                    {status}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
@@ -459,62 +410,24 @@ export default function Aside({
                         Network
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="network"
-                                id="network_3"
-                                value="3"
-                            />
-                            <label
-                                htmlFor="network_3"
-                                className="text-gray-600 uppercase"
-                            >
-                                3G
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="network"
-                                id="network_4"
-                                value="4"
-                            />
-                            <label
-                                htmlFor="network_4"
-                                className="text-gray-600 uppercase"
-                            >
-                                4G
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="network"
-                                id="network_5"
-                                value="5"
-                            />
-                            <label
-                                htmlFor="network_5"
-                                className="text-gray-600 uppercase"
-                            >
-                                5G
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="network"
-                                id="network_wifi"
-                                value="wifi"
-                            />
-                            <label
-                                htmlFor="network_wifi"
-                                className="text-gray-600 uppercase"
-                            >
-                                WIFI
-                            </label>
-                        </li>
+                        {networkTypeListings.map(({ network }) => (
+                            <li key={network} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="network"
+                                    id={network}
+                                    value={network}
+                                />
+                                <label
+                                    htmlFor={network}
+                                    className="text-gray-600 uppercase"
+                                >
+                                    {isNaN(parseInt(network))
+                                        ? network
+                                        : network + "G"}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
@@ -522,59 +435,22 @@ export default function Aside({
                 <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">OS</h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="os"
-                                id="os_android"
-                                value="android"
-                            />
-                            <label
-                                htmlFor="os_android"
-                                className="text-gray-600 capitalize"
-                            >
-                                android
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="os"
-                                id="os_ios"
-                                value="ios"
-                            />
-                            <label htmlFor="os_ios" className="text-gray-600">
-                                IOS
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="os"
-                                id="os_windows"
-                                value="windows"
-                            />
-                            <label
-                                htmlFor="os_windows"
-                                className="text-gray-600 capitalize"
-                            >
-                                windows
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="os"
-                                id="os_java"
-                                value="java"
-                            />
-                            <label
-                                htmlFor="os_java"
-                                className="text-gray-600 capitalize"
-                            >
-                                Java
-                            </label>
-                        </li>
+                        {osListings.map(({ os }) => (
+                            <li key={os} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="os"
+                                    id={os}
+                                    value={os}
+                                />
+                                <label
+                                    htmlFor={os}
+                                    className="text-gray-600 capitalize"
+                                >
+                                    {os}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
@@ -584,76 +460,22 @@ export default function Aside({
                         RAM
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="ram"
-                                id="ram_2"
-                                value="2"
-                            />
-                            <label
-                                htmlFor="ram_2"
-                                className="text-gray-600 capitalize"
-                            >
-                                2 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="ram"
-                                id="ram_4"
-                                value="4"
-                            />
-                            <label
-                                htmlFor="ram_4"
-                                className="text-gray-600 capitalize"
-                            >
-                                4 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="ram"
-                                id="ram_6"
-                                value="6"
-                            />
-                            <label
-                                htmlFor="ram_6"
-                                className="text-gray-600 capitalize"
-                            >
-                                6 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="ram"
-                                id="ram_8"
-                                value="8"
-                            />
-                            <label
-                                htmlFor="ram_8"
-                                className="text-gray-600 capitalize"
-                            >
-                                8 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="ram"
-                                id="ram_12"
-                                value="12"
-                            />
-                            <label
-                                htmlFor="ram_12"
-                                className="text-gray-600 capitalize"
-                            >
-                                12 GB
-                            </label>
-                        </li>
+                        {ramListings.map(({ ram }) => (
+                            <li key={ram} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="ram"
+                                    id={ram}
+                                    value={ram}
+                                />
+                                <label
+                                    htmlFor={ram}
+                                    className="text-gray-600 capitalize"
+                                >
+                                    {ram} GB
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
@@ -663,76 +485,22 @@ export default function Aside({
                         storage
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="storage"
-                                id="storage_16"
-                                value="16"
-                            />
-                            <label
-                                htmlFor="storage_16"
-                                className="text-gray-600 capitalize"
-                            >
-                                16 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="storage"
-                                id="storage_32"
-                                value="32"
-                            />
-                            <label
-                                htmlFor="storage_32"
-                                className="text-gray-600 capitalize"
-                            >
-                                32 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="storage"
-                                id="storage_64"
-                                value="64"
-                            />
-                            <label
-                                htmlFor="storage_64"
-                                className="text-gray-600 capitalize"
-                            >
-                                64 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="storage"
-                                id="storage_128"
-                                value="128"
-                            />
-                            <label
-                                htmlFor="storage_128"
-                                className="text-gray-600 capitalize"
-                            >
-                                128 GB
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="storage"
-                                id="storage_256"
-                                value="256"
-                            />
-                            <label
-                                htmlFor="storage_256"
-                                className="text-gray-600 capitalize"
-                            >
-                                256 GB
-                            </label>
-                        </li>
+                        {storageListings.map(({ storage }) => (
+                            <li key={storage} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="storage"
+                                    id={storage}
+                                    value={storage}
+                                />
+                                <label
+                                    htmlFor={storage}
+                                    className="text-gray-600 capitalize"
+                                >
+                                    {storage} GB
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
             </aside>

@@ -12,6 +12,11 @@ function App() {
     const [brandListings, setBrandListings] = useState([]);
     const [chipsetListings, setChipsetListings] = useState([]);
     const [displayTypeListings, setDisplayTypeListings] = useState([]);
+    const [marketStatusListings, setMarketStatusListings] = useState([]);
+    const [networkTypeListings, setNetworkTypeListings] = useState([]);
+    const [osListings, setOsListings] = useState([]);
+    const [ramListings, setRamListings] = useState([]);
+    const [storageListings, setStorageListings] = useState([]);
     const [query, setQuery] = useState("");
     const [showItems, setShowItems] = useState(20);
     const [sortBy, setSortBy] = useState("default");
@@ -21,7 +26,12 @@ function App() {
             setMobiles(res.data.mobiles.data);
             setBrandListings(res.data.brands);
             setChipsetListings(res.data.chipsets);
-            setDisplayTypeListings(res.data.displayTypeListings);
+            setDisplayTypeListings(res.data.display);
+            setMarketStatusListings(res.data.status);
+            setNetworkTypeListings(res.data.network);
+            setOsListings(res.data.os);
+            setRamListings(res.data.ram);
+            setStorageListings(res.data.storage);
         });
     }, []);
 
@@ -78,6 +88,11 @@ function App() {
                     brandListings={brandListings}
                     chipsetListings={chipsetListings}
                     displayTypeListings={displayTypeListings}
+                    marketStatusListings={marketStatusListings}
+                    networkTypeListings={networkTypeListings}
+                    osListings={osListings}
+                    ramListings={ramListings}
+                    storageListings={storageListings}
                 />
                 <Main
                     mobiles={mobiles}

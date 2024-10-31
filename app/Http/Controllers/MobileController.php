@@ -13,7 +13,12 @@ class MobileController extends Controller {
     public function index(Request $request) {
         $brands = Mobile::select("brand")->distinct()->get();
         $chipsets = Mobile::select("chipset")->distinct()->get();
-        $displayTypeListings = Mobile::select("display_type")->distinct()->get();
+        $displayTypes = Mobile::select("display_type")->distinct()->get();
+        $status = Mobile::select("status")->distinct()->get();
+        $networkTypes = Mobile::select("network")->distinct()->get();
+        $os = Mobile::select("os")->distinct()->get();
+        $ram = Mobile::select("ram")->distinct()->get();
+        $storage = Mobile::select("storage")->distinct()->get();
 
         $query = $request->input("query");
         $showItems = $request->input("showItems");
@@ -41,7 +46,12 @@ class MobileController extends Controller {
             'mobiles' => Mobile::latest()->simplePaginate($this->perPage),
             'brands' => $brands,
             "chipsets" => $chipsets,
-            "displayTypeListings" => $displayTypeListings
+            "display" => $displayTypes,
+            "status" => $status,
+            "network" => $networkTypes,
+            "os" => $os,
+            "ram" => $ram,
+            "storage" => $storage
         ];
     }
 }
