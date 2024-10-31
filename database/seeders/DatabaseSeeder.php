@@ -24,19 +24,20 @@ class DatabaseSeeder extends Seeder {
                     ['Samsung', 'Google', 'OnePlus', 'Xiaomi', 'Oppo', 'Vivo', 'Sony', 'Realme', 'Asus', 'Motorola',]
                 ),
                 'price' => fake()->numberBetween(10000, 100000),
-                'battery_capacity' => fake()->numberBetween(4000, 7000) . ' mAh',
+                'battery_capacity' => fake()->numberBetween(4000, 7000),
                 'battery_type' => fake()->randomElement(['Lithium Polymer (Li-Po)', 'Lithium-ion (Li-Ion)']),
-                'camera' => fake()->randomElement(['12 MP', '16 MP', '48 MP', '64 MP', '200 MP']),
+                'camera' => fake()->randomElement(['12', '16', '48', '64', '200']),
                 'chipset' => fake()->randomElement(
                     ['Bionic', 'Exynos', 'Kirin', 'MediaTek', 'Qualcomm', 'Unisoc']
                 ),
-                'refresh_rate' => fake()->randomElement(['120Hz', '144Hz', '165Hz', '90Hz', '60Hz']),
+                'refresh_rate' => fake()->randomElement(['120', '144', '165', '90', '60']),
                 'os' => fake()->randomElement(['Android', 'iOS', 'Windows', 'Java']),
-                'ram' => fake()->randomElement(['2 GB', '4 GB', '6 GB', '8 GB', '12 GB']),
-                'storage' => fake()->randomElement(['32 GB', '64 GB', '128 GB', '256 GB']),
+                'ram' => fake()->randomElement(['2', '4', '6', '8', '12']),
+                'storage' => fake()->randomElement(['16', '32', '64', '128', '256']),
                 'display_type' => fake()->randomElement([' AMOLED', 'IPS LCD', 'LCD', 'OLED']),
                 'status' => fake()->randomElement(['official', 'unofficial', 'available', 'not available', 'upcoming']),
-                'network' => fake()->randomElement(['3G', '4G', '5G', 'WIFI', 'upcoming']),
+                // here network should be combo of following values, not only one!
+                'network' => fake()->randomElement(['3', '4', '5', 'WIFI']),
                 'cover' => 'https://picsum.photos/seed/' . fake()->numberBetween(1, 1000) . '/400/300',
                 'created_at' => $currentTimestamp,
             ];

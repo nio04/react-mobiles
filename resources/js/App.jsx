@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+
+import Nav from "./layouts/Nav";
+import Aside from "./layouts/Aside";
+import Main from "./layouts/Main";
 
 function App() {
-    const [mobiles, setMobiles] = useState([]);
-    useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/mobiles")
-            .then((res) => res.json())
-            .then((data) => setMobiles(data.data));
-    }, []);
-
     return (
-        <div>
-            <h1>Mobile collection</h1>
-            <ul>
-                {mobiles.map((mobile) => (
-                    <li key={mobile.id}>{mobile.name}</li>
-                ))}
-            </ul>
+        <div className="grid grid-cols-12 gap-8 p-4">
+            <Nav />
+
+            <main className="flex col-start-1 col-end-13 bg-blue-200">
+                <Aside />
+                <Main />
+            </main>
         </div>
     );
 }
