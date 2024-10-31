@@ -1,4 +1,4 @@
-export default function Aside() {
+export default function Aside({ brandListings }) {
     return (
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
@@ -47,40 +47,21 @@ export default function Aside() {
                         />
                     </form>
                     <ul className="h-32 pl-3 mt-1 overflow-y-scroll min-w-44 max-w-48">
-                        <li className="flex gap-2">
-                            <input type="checkbox" name="xiaomi" id="xiaomi" />
-                            <label htmlFor="xiaomi" className="text-gray-600">
-                                Xiaomi
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input type="checkbox" name="realmi" id="realmi" />
-                            <label htmlFor="realmi" className="text-gray-600">
-                                Realmi
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="samsung"
-                                id="samsung"
-                            />
-                            <label htmlFor="samsung" className="text-gray-600">
-                                Samsung
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input type="checkbox" name="lenovo" id="lenovo" />
-                            <label htmlFor="lenovo" className="text-gray-600">
-                                Lenovo
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input type="checkbox" name="huawei" id="huawei" />
-                            <label htmlFor="huawei" className="text-gray-600">
-                                Huawei
-                            </label>
-                        </li>
+                        {brandListings.map(({ brand }) => (
+                            <li key={brand} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name={brand}
+                                    id={brand}
+                                />
+                                <label
+                                    htmlFor={brand}
+                                    className="text-gray-600"
+                                >
+                                    {brand}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
