@@ -10,6 +10,7 @@ const API_URL = "http://127.0.0.1:8000/api/mobiles";
 function App() {
     const [mobiles, setMobiles] = useState([]);
     const [brandListings, setBrandListings] = useState([]);
+    const [chipsetListings, setChipsetListings] = useState([]);
     const [query, setQuery] = useState("");
     const [showItems, setShowItems] = useState(20);
     const [sortBy, setSortBy] = useState("default");
@@ -18,6 +19,7 @@ function App() {
         axios(API_URL).then((res) => {
             setMobiles(res.data.mobiles.data);
             setBrandListings(res.data.brands);
+            setChipsetListings(res.data.chipsets);
         });
     }, []);
 
@@ -70,7 +72,10 @@ function App() {
             <Nav onSetMobiles={handleMobiles} onSetQuery={handleQuery} />
 
             <main className="flex col-start-2 col-end-11 bg-blue-200 translate-x-14">
-                <Aside brandListings={brandListings} />
+                <Aside
+                    brandListings={brandListings}
+                    chipsetListings={chipsetListings}
+                />
                 <Main
                     mobiles={mobiles}
                     showItems={showItems}

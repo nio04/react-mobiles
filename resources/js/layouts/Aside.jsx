@@ -1,4 +1,4 @@
-export default function Aside({ brandListings }) {
+export default function Aside({ brandListings, chipsetListings }) {
     return (
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
@@ -51,8 +51,9 @@ export default function Aside({ brandListings }) {
                             <li key={brand} className="flex gap-2">
                                 <input
                                     type="checkbox"
-                                    name={brand}
+                                    name="brand"
                                     id={brand}
+                                    value={brand}
                                 />
                                 <label
                                     htmlFor={brand}
@@ -260,90 +261,22 @@ export default function Aside({ brandListings }) {
                         Chipset
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_bionic"
-                                value="Bionic"
-                            />
-                            <label
-                                htmlFor="chipset_bionic"
-                                className="text-gray-600"
-                            >
-                                Bionic
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_exynos"
-                                value="Exynos"
-                            />
-                            <label
-                                htmlFor="chipset_exynos"
-                                className="text-gray-600"
-                            >
-                                Exynos
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_kirin"
-                                value="Kirin"
-                            />
-                            <label
-                                htmlFor="chipset_kirin"
-                                className="text-gray-600"
-                            >
-                                Kirin
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_mediatek"
-                                value="MediaTek"
-                            />
-                            <label
-                                htmlFor="chipset_mediatek"
-                                className="text-gray-600"
-                            >
-                                MediaTek
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_qualcomm"
-                                value="Qualcomm"
-                            />
-                            <label
-                                htmlFor="chipset_qualcomm"
-                                className="text-gray-600"
-                            >
-                                Qualcomm
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="chipset"
-                                id="chipset_unisoc"
-                                value="Unisoc"
-                            />
-                            <label
-                                htmlFor="chipset_unisoc"
-                                className="text-gray-600"
-                            >
-                                Unisoc
-                            </label>
-                        </li>
+                        {chipsetListings.map(({ chipset }) => (
+                            <li key={chipset} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="chipset"
+                                    id={chipset}
+                                    value={chipset}
+                                />
+                                <label
+                                    htmlFor={chipset}
+                                    className="text-gray-600"
+                                >
+                                    {chipset}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 

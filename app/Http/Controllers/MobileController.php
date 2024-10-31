@@ -12,6 +12,7 @@ class MobileController extends Controller {
      */
     public function index(Request $request) {
         $brands = Mobile::select("brand")->distinct()->get();
+        $chipsets = MObile::select("chipset")->distinct()->get();
 
         $query = $request->input("query");
         $showItems = $request->input("showItems");
@@ -35,6 +36,10 @@ class MobileController extends Controller {
             return Mobile::orderBy("price", "desc")->simplePaginate($this->perPage);
         }
 
-        return ['mobiles' => Mobile::latest()->simplePaginate($this->perPage), 'brands' => $brands];
+        return [
+            'mobiles' => Mobile::latest()->simplePaginate($this->perPage),
+            'brands' => $brands,
+            "chipsets" => $chipsets
+        ];
     }
 }
