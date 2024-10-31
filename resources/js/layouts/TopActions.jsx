@@ -1,4 +1,9 @@
-export default function TopActions({ showItems, onSetShowItems }) {
+export default function TopActions({
+    showItems,
+    onSetShowItems,
+    sortBy,
+    onSetSortBy,
+}) {
     return (
         <>
             <section className="flex items-center justify-end gap-4 py-3 pr-5">
@@ -8,9 +13,11 @@ export default function TopActions({ showItems, onSetShowItems }) {
                     <select
                         name="sort_by"
                         id="sort_by"
+                        value={sortBy}
+                        onChange={(e) => onSetSortBy(e.target.value)}
                         className="cursor-pointer w-28"
                     >
-                        <option value="">default</option>
+                        <option value="default">default</option>
                         <option value="low_to_high">Low to High</option>
                         <option value="high_to_low">High to Low</option>
                     </select>

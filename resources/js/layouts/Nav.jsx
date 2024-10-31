@@ -16,7 +16,7 @@ export default function Nav({ onSetMobiles, onSetQuery }) {
                         type="text"
                         name="search"
                         id="search"
-                        onChange={(e) => onSetQuery(e)}
+                        onChange={(e) => onSetQuery(e.target.value)}
                         placeholder="Enter Device Name"
                     />
                 </form>

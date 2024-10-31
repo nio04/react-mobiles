@@ -11,6 +11,7 @@ function App() {
     const [mobiles, setMobiles] = useState([]);
     const [query, setQuery] = useState("");
     const [showItems, setShowItems] = useState(20);
+    const [sortBy, setSortBy] = useState("default");
 
     useEffect(() => {
         axios(API_URL).then((res) => setMobiles(res.data.data));
@@ -28,8 +29,8 @@ function App() {
         }
     }
 
-    function handleQuery(e) {
-        setQuery(e.target.value);
+    function handleQuery(value) {
+        setQuery(value);
     }
 
     function handleShowItems(value) {
@@ -38,6 +39,20 @@ function App() {
         try {
             axios(API_URL, {
                 params: { showItems: value },
+            }).then((res) => {
+                setMobiles(res.data.data);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function handleSortBy(value) {
+        setSortBy(value);
+
+        try {
+            axios(API_URL, {
+                params: { sortBy: value },
             }).then((res) => {
                 setMobiles(res.data.data);
             });
@@ -56,6 +71,8 @@ function App() {
                     mobiles={mobiles}
                     showItems={showItems}
                     onSetShowItems={handleShowItems}
+                    sortBy={sortBy}
+                    onSetSortBy={handleSortBy}
                 />
             </main>
         </div>
