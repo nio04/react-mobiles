@@ -1,4 +1,8 @@
-export default function Aside({ brandListings, chipsetListings }) {
+export default function Aside({
+    brandListings,
+    chipsetListings,
+    displayTypeListings,
+}) {
     return (
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
@@ -351,62 +355,22 @@ export default function Aside({ brandListings, chipsetListings }) {
                         Display Type
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="display_type"
-                                id="display_type_amoled"
-                                value="amoled"
-                            />
-                            <label
-                                htmlFor="display_type_amoled"
-                                className="text-gray-600 uppercase"
-                            >
-                                Amoled
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="display_type"
-                                id="display_type_ips_lcd"
-                                value="IPS LCD"
-                            />
-                            <label
-                                htmlFor="display_type_ips_lcd"
-                                className="text-gray-600 uppercase"
-                            >
-                                IPS LCD
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="display_type"
-                                id="display_type_lcd"
-                                value="LCD"
-                            />
-                            <label
-                                htmlFor="display_type_lcd"
-                                className="text-gray-600 uppercase"
-                            >
-                                LCD
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="display_type"
-                                id="display_type_oled"
-                                value="OLED"
-                            />
-                            <label
-                                htmlFor="display_type_oled"
-                                className="text-gray-600 uppercase"
-                            >
-                                OLCD
-                            </label>
-                        </li>
+                        {displayTypeListings.map(({ display_type }) => (
+                            <li className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="display_type"
+                                    id={display_type}
+                                    value={display_type}
+                                />
+                                <label
+                                    htmlFor={display_type}
+                                    className="text-gray-600 uppercase"
+                                >
+                                    {display_type}
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
 

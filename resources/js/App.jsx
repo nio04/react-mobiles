@@ -11,6 +11,7 @@ function App() {
     const [mobiles, setMobiles] = useState([]);
     const [brandListings, setBrandListings] = useState([]);
     const [chipsetListings, setChipsetListings] = useState([]);
+    const [displayTypeListings, setDisplayTypeListings] = useState([]);
     const [query, setQuery] = useState("");
     const [showItems, setShowItems] = useState(20);
     const [sortBy, setSortBy] = useState("default");
@@ -20,6 +21,7 @@ function App() {
             setMobiles(res.data.mobiles.data);
             setBrandListings(res.data.brands);
             setChipsetListings(res.data.chipsets);
+            setDisplayTypeListings(res.data.displayTypeListings);
         });
     }, []);
 
@@ -75,6 +77,7 @@ function App() {
                 <Aside
                     brandListings={brandListings}
                     chipsetListings={chipsetListings}
+                    displayTypeListings={displayTypeListings}
                 />
                 <Main
                     mobiles={mobiles}
