@@ -38,6 +38,8 @@ export default function Aside({
         );
     }
 
+    use;
+
     useEffect(() => {
         try {
             axios(API_URL, {
