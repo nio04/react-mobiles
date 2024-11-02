@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+const API_URL = "http://127.0.0.1:8000/api/mobiles";
 export default function Aside({
     brandListings,
     chipsetListings,
@@ -7,7 +11,45 @@ export default function Aside({
     osListings,
     ramListings,
     storageListings,
+    // brandFilteringsChecked,
+    // onBrandFilteringsChecked,
+    onSetMobiles,
 }) {
+    const [brandFilteringsChecked, setBrandFilteringsChecked] = useState([]);
+
+    useEffect(() => {
+        const listings = brandListings.map((listing) => ({
+            name: listing.brand,
+            checked: false,
+        }));
+        setBrandFilteringsChecked([...listings]);
+    }, [brandListings]);
+
+    function handleBrandFilteringsChecked(value) {
+        setBrandFilteringsChecked((old) =>
+            old.map((brand) =>
+                brand.name === value
+                    ? {
+                          ...brand,
+                          checked: !brand.checked,
+                      }
+                    : brand
+            )
+        );
+    }
+
+    useEffect(() => {
+        try {
+            axios(API_URL, {
+                params: { brandFilterings: brandFilteringsChecked },
+            }).then((res) => {
+                // onSetMobiles(res.data.brandFilterings.data);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }, [brandFilteringsChecked]);
+
     return (
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
@@ -56,19 +98,25 @@ export default function Aside({
                         />
                     </form>
                     <ul className="h-32 pl-3 mt-1 overflow-y-scroll min-w-44 max-w-48">
-                        {brandListings.map(({ brand }) => (
-                            <li key={brand} className="flex gap-2">
+                        {brandFilteringsChecked.map((brand) => (
+                            <li key={brand?.name} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="brand"
-                                    id={brand}
-                                    value={brand}
+                                    id={brand.name}
+                                    value={brand.name}
+                                    onChange={(e) =>
+                                        handleBrandFilteringsChecked(
+                                            e.target.value
+                                        )
+                                    }
+                                    checked={brand.checked}
                                 />
                                 <label
-                                    htmlFor={brand}
+                                    htmlFor={brand.name}
                                     className="text-gray-600"
                                 >
-                                    {brand}
+                                    {brand.name}
                                 </label>
                             </li>
                         ))}

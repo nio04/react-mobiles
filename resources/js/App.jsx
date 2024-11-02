@@ -9,6 +9,7 @@ const API_URL = "http://127.0.0.1:8000/api/mobiles";
 
 function App() {
     const [mobiles, setMobiles] = useState([]);
+    // *** listings start ***
     const [brandListings, setBrandListings] = useState([]);
     const [chipsetListings, setChipsetListings] = useState([]);
     const [displayTypeListings, setDisplayTypeListings] = useState([]);
@@ -17,6 +18,12 @@ function App() {
     const [osListings, setOsListings] = useState([]);
     const [ramListings, setRamListings] = useState([]);
     const [storageListings, setStorageListings] = useState([]);
+    // *** listings end ***
+
+    // *** filtering start
+    // const [brandFilteringsChecked, setBrandFilteringsChecked] = useState([]);
+
+    // *** filtering end ***
     const [query, setQuery] = useState("");
     const [showItems, setShowItems] = useState(20);
     const [sortBy, setSortBy] = useState("default");
@@ -35,7 +42,11 @@ function App() {
         });
     }, []);
 
-    function handleMobiles() {
+    function handleMobiles(data) {
+        // if (data.length > 0) {
+        //     console.log(data);
+        //     return setMobiles(data);
+        // }
         try {
             axios(API_URL, {
                 params: { query },
@@ -79,6 +90,19 @@ function App() {
         }
     }
 
+    // function handleBrandFilteringsChecked(value) {
+    //     setBrandFilteringsChecked((old) =>
+    //         old.map((brand) =>
+    //             brand.name === value
+    //                 ? {
+    //                       ...brand,
+    //                       checked: !brand.checked,
+    //                   }
+    //                 : brand
+    //         )
+    //     );
+    // }
+
     return (
         <div className="grid grid-cols-12 gap-8 p-4">
             <Nav onSetMobiles={handleMobiles} onSetQuery={handleQuery} />
@@ -93,6 +117,9 @@ function App() {
                     osListings={osListings}
                     ramListings={ramListings}
                     storageListings={storageListings}
+                    // brandFilteringsChecked={brandFilteringsChecked}
+                    // onBrandFilteringsChecked={handleBrandFilteringsChecked}
+                    onSetMobiles={handleMobiles}
                 />
                 <Main
                     mobiles={mobiles}

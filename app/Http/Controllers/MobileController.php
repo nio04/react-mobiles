@@ -19,17 +19,22 @@ class MobileController extends Controller {
         $os = Mobile::select("os")->distinct()->get();
         $ram = Mobile::select("ram")->distinct()->get();
         $storage = Mobile::select("storage")->distinct()->get();
+        // filtering
+        $brandsFilter = [];
 
         $query = $request->input("query");
         $showItems = $request->input("showItems");
         $sortBy = $request->input("sortBy");
+        // filterings
+        $brandsInput = $request->input("brandFilterings");
 
         if ($query) {
             return Mobile::where("name", "like", "%" . $query . "%")->simplePaginate($this->perPage);
         }
 
         if ($showItems) {
-            return Mobile::latest()->simplePaginate($showItems);
+            $this->perPage = $showItems;
+            return Mobile::latest()->simplePaginate($this->perPage);
         }
 
         if ($sortBy === "default") {
@@ -42,6 +47,22 @@ class MobileController extends Controller {
             return Mobile::orderBy("price", "desc")->simplePaginate($this->perPage);
         }
 
+        // filtering
+        if ($request->input("brandFilterings")) {
+            $requestedBrandFilterings = [];
+
+            foreach ($brandsInput as $brand) {
+                if ($brand['checked'] === "true") {
+                    $requestedBrandFilterings[] = $brand['name'];
+                }
+            }
+
+            $brandsFilter = Mobile::whereIn(
+                'brand',
+                $requestedBrandFilterings
+            )->paginate($this->perPage);
+            // dump($brandsFilter);
+        }
         return [
             'mobiles' => Mobile::latest()->simplePaginate($this->perPage),
             'brands' => $brands,
@@ -51,7 +72,8 @@ class MobileController extends Controller {
             "network" => $networkTypes,
             "os" => $os,
             "ram" => $ram,
-            "storage" => $storage
+            "storage" => $storage,
+            "brandFilterings" => $brandsFilter
         ];
     }
 }
