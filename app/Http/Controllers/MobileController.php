@@ -11,6 +11,7 @@ class MobileController extends Controller {
      * Display a listing of the resource.
      */
     public function index(Request $request) {
+        $mobiles = Mobile::latest()->simplePaginate($this->perPage);
         $brands = Mobile::select("brand")->distinct()->get();
         $chipsets = Mobile::select("chipset")->distinct()->get();
         $displayTypes = Mobile::select("display_type")->distinct()->get();
@@ -57,14 +58,16 @@ class MobileController extends Controller {
                 }
             }
 
-            $brandsFilter = Mobile::whereIn(
-                'brand',
-                $requestedBrandFilterings
-            )->paginate($this->perPage);
-            // dump($brandsFilter);
+            if (count($requestedBrandFilterings) > 0) {
+                $mobiles = Mobile::whereIn(
+                    'brand',
+                    $requestedBrandFilterings
+                )->paginate($this->perPage);
+            };
         }
+        // dump($mobiles);
         return [
-            'mobiles' => Mobile::latest()->simplePaginate($this->perPage),
+            'mobiles' => $mobiles,
             'brands' => $brands,
             "chipsets" => $chipsets,
             "display" => $displayTypes,
@@ -73,7 +76,6 @@ class MobileController extends Controller {
             "os" => $os,
             "ram" => $ram,
             "storage" => $storage,
-            "brandFilterings" => $brandsFilter
         ];
     }
 }

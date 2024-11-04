@@ -3,7 +3,7 @@ import Paginate from "./Paginate";
 import Item from "../components/Item";
 
 export default function Main({
-    mobiles,
+    mobiles = [],
     showItems,
     onSetShowItems,
     sortBy,

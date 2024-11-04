@@ -38,19 +38,22 @@ export default function Aside({
         );
     }
 
-    use;
-
     useEffect(() => {
+        if (brandFilteringsChecked.length < 1) return;
+        const checkdAny = brandFilteringsChecked.some(
+            (el) => el.checked === true
+        );
+        if (!checkdAny) return;
         try {
             axios(API_URL, {
                 params: { brandFilterings: brandFilteringsChecked },
             }).then((res) => {
-                // onSetMobiles(res.data.brandFilterings.data);
+                onSetMobiles(res.data.mobiles.data);
             });
         } catch (error) {
             console.error(error);
         }
-    }, [brandFilteringsChecked]);
+    }, [brandFilteringsChecked, onSetMobiles]);
 
     return (
         <>
@@ -90,7 +93,7 @@ export default function Aside({
                     >
                         Brand
                     </label>
-                    <form action="#" method="post" className="">
+                    {/* <form method="post">
                         <input
                             type="text"
                             name="brand"
@@ -98,8 +101,8 @@ export default function Aside({
                             placeholder="Enter Brand Name"
                             className="h-8 pl-2"
                         />
-                    </form>
-                    <ul className="h-32 pl-3 mt-1 overflow-y-scroll min-w-44 max-w-48">
+                    </form> */}
+                    <ul className="h-32 pl-3 overflow-y-scroll mt- min-w-44 max-w-48">
                         {brandFilteringsChecked.map((brand) => (
                             <li key={brand?.name} className="flex gap-2">
                                 <input

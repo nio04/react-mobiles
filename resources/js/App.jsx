@@ -43,10 +43,9 @@ function App() {
     }, []);
 
     function handleMobiles(data) {
-        // if (data.length > 0) {
-        //     console.log(data);
-        //     return setMobiles(data);
-        // }
+        if (data instanceof Object) {
+            return setMobiles(data);
+        }
         try {
             axios(API_URL, {
                 params: { query },
@@ -94,7 +93,7 @@ function App() {
     //     setBrandFilteringsChecked((old) =>
     //         old.map((brand) =>
     //             brand.name === value
-    //                 ? {
+    //                  {
     //                       ...brand,
     //                       checked: !brand.checked,
     //                   }
