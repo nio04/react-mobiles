@@ -20,11 +20,11 @@ root.render(<RouterProvider router={router} />);
 async function dataLoading({ request }) {
     const url = new URL(request.url);
     const searchParams = url.search
-        ? `brand=${url.searchParams.get("brand")}&listings=${
-              url.searchParams.get("listings") ?? "20"
-          }&sortBy=${url.searchParams.get("sortBy") ?? "default"}&q=${
-              url.searchParams.get("q") ?? ""
-          }`
+        ? `brand=${url.searchParams.get("brand") ?? ""}&chipset=${
+              url.searchParams.get("chipset") ?? ""
+          }&listings=${url.searchParams.get("listings") ?? "20"}&sortBy=${
+              url.searchParams.get("sortBy") ?? "default"
+          }&q=${url.searchParams.get("q") ?? ""}`
         : new URLSearchParams(url.search);
 
     // console.log(url);

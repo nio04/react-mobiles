@@ -6,29 +6,57 @@ use App\Models\Mobile;
 use Illuminate\Http\Request;
 
 class MobileController extends Controller {
-    protected $perPage = 20;
 
-    public function __construct() {
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request) {
-        $mobiles = Mobile::latest()->simplePaginate($request->input("listings"));
+        $mobiles = Mobile::query();
 
-        $query = $request->input("query");
+        $query = $request->input("q") ?? "";
+        $sortBy = $request->input("sortBy") ?? "default";
+        $listings = $request->input("listings") ?? "20";
+        $brandRequest = $request->input("brand") ?? "";
+        $chipsetRequest = $request->input("chipset") ?? "";
 
-        if ($query) {
-            return Mobile::where("name", "like", "%" . $query . "%")->simplePaginate($request->input("listings"));
+        if (!empty($query)) {
+            $mobiles->where(
+                "name",
+                "like",
+                "%" . $query ?? "" . "%"
+            );
         }
+        if (!empty($sortBy)) {
+            $mobiles->orderBy(
+                "price",
+                ($sortBy === "default" ||
+                    $sortBy === "low_to_high")
+                    ? "asc" : "desc"
+            );
+        }
+        if (!empty($listings)) {
+            $mobiles->simplePaginate($listings);
+        }
+
+        // filterings
+        if (!empty($brandRequest)) {
+            $brandInput = explode(",", $request->input("brand"));
+            $mobiles->whereIn("brand", $brandInput);
+        }
+
+        if (!empty($chipsetRequest)) {
+            $chipsetInput = explode(",", $request->input("chipset"));
+            $mobiles->whereIn("chipset", $chipsetInput);
+        }
+
+        return response()->json($mobiles->simplePaginate($request->input("listings") ?? "20"));
 
         // filtering
-        if ($request->input("brand")) {
-            $brandRequest = explode(",", $request->input("brand"));
-            logger("test", [$request->input("listings")]);
-            $mobiles = Mobile::where("name", "like", "%" . $request->input("q") ?? "" . "%")->whereIn('brand', $brandRequest)->orderBy("price", ($request->input("sortBy") === "default" || $request->input("sortBy") === "low_to_high") ? "asc" : "desc")->simplePaginate($request->input("listings"));
-        }
-        return ['mobiles' => $mobiles];
+        // if ($request->input("brand")) {
+        //     logger("test", [$request->input("listings")]);
+        //     $mobiles = Mobile::where("name", "like", "%" . $request->input("q") ?? "" . "%")->whereIn('brand', $brandRequest)->orderBy("price", ($request->input("sortBy") === "default" || $request->input("sortBy") === "low_to_high") ? "asc" : "desc")->simplePaginate($request->input("listings"));
+        // }
+        // return ['mobiles' => $mobiles];
     }
 
     function loadAdditionalData() {
@@ -51,11 +79,5 @@ class MobileController extends Controller {
             "ram" => $ram,
             "storage" => $storage,
         ];
-    }
-
-    function queryStringProcessor($key) {
-        $queryString = explode("=", request()->query($key, ""));
-        array_shift($queryString);
-        return  $queryString;
     }
 }

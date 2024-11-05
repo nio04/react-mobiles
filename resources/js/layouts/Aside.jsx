@@ -3,28 +3,57 @@ import { useSearchParams } from "react-router-dom";
 
 export default function Aside({ additionalMobilesData }) {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [localQuery, setLocalQuery] = useState(
+    const [brandQuery, setBrandQuery] = useState(
         searchParams.get("brand") || []
     );
+    const [chipsetQuery, setChipsetQuery] = useState(
+        searchParams.get("chipset") || []
+    );
 
-    function handleBrandSelected(value) {
-        setLocalQuery((old) =>
-            old.includes(value)
-                ? old.filter((item) => item !== value)
-                : [...old, value]
-        );
+    function handleFilterSelected({ filter, value }) {
+        if (filter === "brand") {
+            setBrandQuery((old) =>
+                old.includes(value)
+                    ? old.filter((item) => item !== value)
+                    : [...old, value]
+            );
+        }
+        if (filter === "chipset") {
+            setChipsetQuery((old) =>
+                old.includes(value)
+                    ? old.filter((item) => item !== value)
+                    : [...old, value]
+            );
+        }
     }
 
     useEffect(() => {
-        if (localQuery.length < 1) return;
-        if (localQuery.toString() === searchParams.get("brand")) return;
-        setSearchParams({ brand: localQuery.toString() });
+        if ([...brandQuery, ...chipsetQuery].length < 1) return;
+
+        if (
+            [
+                { key: "brand", value: brandQuery },
+                { key: "chipset", value: chipsetQuery },
+            ].every((item) => item.value === searchParams.get(item.key))
+        ) {
+            console.log("brandQuery");
+            return;
+        }
+
+        setSearchParams({
+            brand: brandQuery.toString(),
+            chipset: chipsetQuery.toString(),
+        });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localQuery]);
+    }, [brandQuery, chipsetQuery]);
 
     useEffect(() => {
         searchParams.has("brand") &&
-            setLocalQuery(searchParams.get("brand").split(","));
+            setBrandQuery(searchParams.get("brand").split(","));
+
+        searchParams.has("chipset") &&
+            setChipsetQuery(searchParams.get("chipset").split(","));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -32,7 +61,7 @@ export default function Aside({ additionalMobilesData }) {
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
                 {/* Price range */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <label
                         htmlFor="min-price"
                         className="text-2xl font-semibold text-gray-700"
@@ -56,7 +85,7 @@ export default function Aside({ additionalMobilesData }) {
                             className="h-8 pl-2 -mt-2"
                         />
                     </div>
-                </section>
+                </section> */}
 
                 {/* Brand */}
                 <section className="flex flex-col gap-3 mb-2">
@@ -66,15 +95,7 @@ export default function Aside({ additionalMobilesData }) {
                     >
                         Brand
                     </label>
-                    {/* <form method="post">
-                        <input
-                            type="text"
-                            name="brand"
-                            id="brand"
-                            placeholder="Enter Brand Name"
-                            className="h-8 pl-2"
-                        />
-                    </form> */}
+
                     <ul className="h-32 pl-3 overflow-y-scroll mt- min-w-44 max-w-48">
                         {additionalMobilesData.brands.map(({ brand }) => (
                             <li key={brand} className="flex gap-2">
@@ -84,10 +105,13 @@ export default function Aside({ additionalMobilesData }) {
                                     id={brand}
                                     value={brand}
                                     onChange={(e) =>
-                                        handleBrandSelected(e.target.value)
+                                        handleFilterSelected({
+                                            filter: "brand",
+                                            value: e.target.value,
+                                        })
                                     }
                                     checked={
-                                        localQuery.includes(brand)
+                                        brandQuery.includes(brand)
                                             ? true
                                             : false
                                     }
@@ -293,18 +317,29 @@ export default function Aside({ additionalMobilesData }) {
                 </section> */}
 
                 {/* Chipset */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Chipset
                     </h4>
                     <ul className="pl-2">
-                        {chipsetListings.map(({ chipset }) => (
+                        {additionalMobilesData.chipsets.map(({ chipset }) => (
                             <li key={chipset} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="chipset"
                                     id={chipset}
                                     value={chipset}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "chipset",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        chipsetQuery.includes(chipset)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={chipset}
@@ -315,7 +350,7 @@ export default function Aside({ additionalMobilesData }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* Refresh Rate */}
                 {/* <section className="flex flex-col gap-3 mb-2">

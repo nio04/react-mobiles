@@ -1,26 +1,17 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function TopActions() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [sortBy, setSortBy] = useState(
-        searchParams.get("sortBy") || "default"
-    );
-    const [listings, setListings] = useState(
-        searchParams.get("listings") || "20"
-    );
 
     function handleShowListings(e) {
         const value = e.target.value;
         searchParams.set("listings", value);
-        setListings(value);
         setSearchParams(searchParams);
     }
 
     function handleSortings(e) {
         const value = e.target.value;
         searchParams.set("sortBy", value);
-        setSortBy(value);
         setSearchParams(searchParams);
     }
 
@@ -33,7 +24,7 @@ export default function TopActions() {
                     <select
                         name="sort_by"
                         id="sort_by"
-                        value={sortBy}
+                        value={searchParams.get("sortBy") ?? "default"}
                         onChange={handleSortings}
                         className="cursor-pointer w-28"
                     >
@@ -49,7 +40,7 @@ export default function TopActions() {
                     <select
                         name="show"
                         id="show"
-                        value={listings}
+                        value={searchParams.get("listings") ?? "20"}
                         onChange={handleShowListings}
                         className="w-16 cursor-pointer"
                     >
