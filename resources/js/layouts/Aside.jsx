@@ -1,59 +1,32 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/mobiles";
-export default function Aside({
-    brandListings,
-    chipsetListings,
-    displayTypeListings,
-    marketStatusListings,
-    networkTypeListings,
-    osListings,
-    ramListings,
-    storageListings,
-    // brandFilteringsChecked,
-    // onBrandFilteringsChecked,
-    onSetMobiles,
-}) {
-    const [brandFilteringsChecked, setBrandFilteringsChecked] = useState([]);
+export default function Aside({ additionalMobilesData }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [localQuery, setLocalQuery] = useState(
+        searchParams.get("brand") || []
+    );
 
-    useEffect(() => {
-        const listings = brandListings.map((listing) => ({
-            name: listing.brand,
-            checked: false,
-        }));
-        setBrandFilteringsChecked([...listings]);
-    }, [brandListings]);
-
-    function handleBrandFilteringsChecked(value) {
-        setBrandFilteringsChecked((old) =>
-            old.map((brand) =>
-                brand.name === value
-                    ? {
-                          ...brand,
-                          checked: !brand.checked,
-                      }
-                    : brand
-            )
+    function handleBrandSelected(value) {
+        setLocalQuery((old) =>
+            old.includes(value)
+                ? old.filter((item) => item !== value)
+                : [...old, value]
         );
     }
 
     useEffect(() => {
-        if (brandFilteringsChecked.length < 1) return;
-        const checkdAny = brandFilteringsChecked.some(
-            (el) => el.checked === true
-        );
-        if (!checkdAny) return;
-        try {
-            axios(API_URL, {
-                params: { brandFilterings: brandFilteringsChecked },
-            }).then((res) => {
-                onSetMobiles(res.data.mobiles.data);
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }, [brandFilteringsChecked, onSetMobiles]);
+        if (localQuery.length < 1) return;
+        if (localQuery.toString() === searchParams.get("brand")) return;
+        setSearchParams({ brand: localQuery.toString() });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localQuery]);
+
+    useEffect(() => {
+        searchParams.has("brand") &&
+            setLocalQuery(searchParams.get("brand").split(","));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -103,25 +76,27 @@ export default function Aside({
                         />
                     </form> */}
                     <ul className="h-32 pl-3 overflow-y-scroll mt- min-w-44 max-w-48">
-                        {brandFilteringsChecked.map((brand) => (
-                            <li key={brand?.name} className="flex gap-2">
+                        {additionalMobilesData.brands.map(({ brand }) => (
+                            <li key={brand} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="brand"
-                                    id={brand.name}
-                                    value={brand.name}
+                                    id={brand}
+                                    value={brand}
                                     onChange={(e) =>
-                                        handleBrandFilteringsChecked(
-                                            e.target.value
-                                        )
+                                        handleBrandSelected(e.target.value)
                                     }
-                                    checked={brand.checked}
+                                    checked={
+                                        localQuery.includes(brand)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
-                                    htmlFor={brand.name}
+                                    htmlFor={brand}
                                     className="text-gray-600"
                                 >
-                                    {brand.name}
+                                    {brand}
                                 </label>
                             </li>
                         ))}
@@ -129,7 +104,7 @@ export default function Aside({
                 </section>
 
                 {/* Battery Capacity */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Battery Capacity
                     </h4>
@@ -213,10 +188,10 @@ export default function Aside({
                             </label>
                         </li>
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Battery Type */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Battery Type
                     </h4>
@@ -250,10 +225,10 @@ export default function Aside({
                             </label>
                         </li>
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Camera */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Camera
                     </h4>
@@ -315,10 +290,10 @@ export default function Aside({
                             </label>
                         </li>
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Chipset */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Chipset
                     </h4>
@@ -340,10 +315,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Refresh Rate */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Refresh Rate
                     </h4>
@@ -405,10 +380,10 @@ export default function Aside({
                             </label>
                         </li>
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Dispaly Type */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Display Type
                     </h4>
@@ -430,10 +405,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Market Status */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Market Status
                     </h4>
@@ -455,10 +430,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Network */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Network
                     </h4>
@@ -482,10 +457,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* OS */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">OS</h4>
                     <ul className="pl-2">
                         {osListings.map(({ os }) => (
@@ -505,10 +480,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* RAM */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         RAM
                     </h4>
@@ -530,10 +505,10 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
 
                 {/* Storage */}
-                <section className="flex flex-col gap-3 mb-2">
+                {/* <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         storage
                     </h4>
@@ -555,7 +530,7 @@ export default function Aside({
                             </li>
                         ))}
                     </ul>
-                </section>
+                </section> */}
             </aside>
         </>
     );

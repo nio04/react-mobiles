@@ -5,3 +5,4 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/mobiles", [MobileController::class, "index"])->name("mobiles.index");
+Route::get("/mobiles-data", [MobileController::class, "loadAdditionalData"]);

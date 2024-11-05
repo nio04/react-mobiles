@@ -1,7 +1,19 @@
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 export default function Nav({ onSetMobiles, onSetQuery }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [query, setQuery] = useState("");
+
+    function handleQuery(e) {
+        const value = e.target.value;
+        setQuery(value);
+        searchParams.set("q", value);
+        setSearchParams(searchParams);
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
-        onSetMobiles();
     }
     return (
         <>
@@ -16,7 +28,7 @@ export default function Nav({ onSetMobiles, onSetQuery }) {
                         type="text"
                         name="search"
                         id="search"
-                        onChange={(e) => onSetQuery(e.target.value)}
+                        onChange={handleQuery}
                         placeholder="Enter Device Name"
                     />
                 </form>
