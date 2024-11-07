@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+const filterKeys = ["brand", "chipset", "network"];
+
+const initState = (searchParams) => {
+    return filterKeys.reduce((acc, key) => {
+        acc[key] = searchParams.get(key)
+            ? searchParams.get(key).split(",")
+            : [];
+        return acc;
+    }, {});
+};
 
 export default function Aside({ additionalMobilesData = [] }) {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [localState, setLocalState] = useState({
-        brand: searchParams.get("brand")
-            ? searchParams.get("brand").split(",")
-            : [],
-        chipset: searchParams.get("chipset")
-            ? searchParams.get("chipset").split(",")
-            : [],
-        network: searchParams.get("network")
-            ? searchParams.get("network").split(",")
-            : [],
-    });
+    const [localState, setLocalState] = useState(() => initState(searchParams));
 
     // when an item is checked-unchecked for filter
     function handleFilterSelected({ filter, value }) {
@@ -29,14 +29,26 @@ export default function Aside({ additionalMobilesData = [] }) {
     }
 
     useEffect(() => {
-        const brand = localState.brand.join(",");
-        const chipset = localState.chipset.join(",");
-        const network = localState.network.join(",");
+        // Check if localState matches searchParams
+        const isMatchingSearchParams = filterKeys.every((key) => {
+            const searchParamValue = searchParams.get(key) || "";
+            const localStateValue = localState[key].join(",");
+            return searchParamValue === localStateValue;
+        });
 
-        if (brand === "" && chipset === "" && network === "") return;
-        setSearchParams({ ...localState });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localState]);
+        // Early return if all key-value pairs match
+        if (isMatchingSearchParams) return;
+
+        // Update URL search parameters based on the current localState
+        setSearchParams(
+            filterKeys.reduce((params, key) => {
+                if (localState[key].length) {
+                    params.set(key, localState[key].join(","));
+                }
+                return params;
+            }, new URLSearchParams())
+        );
+    }, [localState, setSearchParams, searchParams]);
 
     return (
         <>
@@ -304,7 +316,7 @@ export default function Aside({ additionalMobilesData = [] }) {
                         Chipset
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData?.chipset?.length > 0 &&
+                        {additionalMobilesData?.chipsets?.length > 0 &&
                             additionalMobilesData.chipsets.map(
                                 ({ chipset }) => (
                                     <li key={chipset} className="flex gap-2">

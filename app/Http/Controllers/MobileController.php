@@ -55,7 +55,7 @@ class MobileController extends Controller {
             $mobiles->whereIn("network", $networkInput);
         }
 
-        return response()->json($mobiles->simplePaginate($request->input("listings") ?? "20"));
+        return response()->json($mobiles->paginate($request->input("listings") ?? "20"));
     }
 
     function loadAdditionalData() {
