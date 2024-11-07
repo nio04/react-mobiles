@@ -3,13 +3,18 @@ import { useSearchParams } from "react-router-dom";
 
 export default function Aside({ additionalMobilesData }) {
     const [searchParams, setSearchParams] = useSearchParams();
+
     const [brandQuery, setBrandQuery] = useState(
         searchParams.get("brand") || []
     );
     const [chipsetQuery, setChipsetQuery] = useState(
         searchParams.get("chipset") || []
     );
+    const [networkQuery, setNetworkQuery] = useState(
+        searchParams.get("network") || []
+    );
 
+    // when an item is checked-unchecked for filter
     function handleFilterSelected({ filter, value }) {
         if (filter === "brand") {
             setBrandQuery((old) =>
@@ -25,29 +30,42 @@ export default function Aside({ additionalMobilesData }) {
                     : [...old, value]
             );
         }
+        if (filter === "network") {
+            setNetworkQuery((old) =>
+                old.includes(value)
+                    ? old.filter((item) => item !== value)
+                    : [...old, value]
+            );
+        }
     }
 
+    // when an item is select, we update the query string.
+    // we are listening for the filter state to change
     useEffect(() => {
-        if ([...brandQuery, ...chipsetQuery].length < 1) return;
+        if ([...brandQuery, ...chipsetQuery, ...networkQuery].length < 1)
+            return;
 
         if (
             [
                 { key: "brand", value: brandQuery },
                 { key: "chipset", value: chipsetQuery },
+                { key: "network", value: networkQuery },
             ].every((item) => item.value === searchParams.get(item.key))
         ) {
-            console.log("brandQuery");
             return;
         }
 
         setSearchParams({
             brand: brandQuery.toString(),
             chipset: chipsetQuery.toString(),
+            network: networkQuery.toString(),
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [brandQuery, chipsetQuery]);
+    }, [brandQuery, chipsetQuery, networkQuery]);
 
+    // on component mount, we check if we have the specific query string exists!
+    // if exist, then we set the value on the state
     useEffect(() => {
         searchParams.has("brand") &&
             setBrandQuery(searchParams.get("brand").split(","));
@@ -468,18 +486,29 @@ export default function Aside({ additionalMobilesData }) {
                 </section> */}
 
                 {/* Network */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Network
                     </h4>
                     <ul className="pl-2">
-                        {networkTypeListings.map(({ network }) => (
+                        {additionalMobilesData.network.map(({ network }) => (
                             <li key={network} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="network"
                                     id={network}
                                     value={network}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "network",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        networkQuery.includes(network)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={network}
@@ -492,7 +521,7 @@ export default function Aside({ additionalMobilesData }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* OS */}
                 {/* <section className="flex flex-col gap-3 mb-2">

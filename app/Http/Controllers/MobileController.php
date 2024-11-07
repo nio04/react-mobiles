@@ -18,6 +18,7 @@ class MobileController extends Controller {
         $listings = $request->input("listings") ?? "20";
         $brandRequest = $request->input("brand") ?? "";
         $chipsetRequest = $request->input("chipset") ?? "";
+        $networkRequest = $request->input("network") ?? "";
 
         if (!empty($query)) {
             $mobiles->where(
@@ -47,6 +48,11 @@ class MobileController extends Controller {
         if (!empty($chipsetRequest)) {
             $chipsetInput = explode(",", $request->input("chipset"));
             $mobiles->whereIn("chipset", $chipsetInput);
+        }
+
+        if (!empty($networkRequest)) {
+            $networkInput = explode(",", $request->input("network"));
+            $mobiles->whereIn("network", $networkInput);
         }
 
         return response()->json($mobiles->simplePaginate($request->input("listings") ?? "20"));
