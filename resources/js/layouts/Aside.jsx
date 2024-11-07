@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export default function Aside({ additionalMobilesData }) {
+export default function Aside({ additionalMobilesData = [] }) {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [localState, setLocalState] = useState({
@@ -78,33 +78,34 @@ export default function Aside({ additionalMobilesData }) {
                     </label>
 
                     <ul className="h-32 pl-3 overflow-y-scroll mt- min-w-44 max-w-48">
-                        {additionalMobilesData.brands.map(({ brand }) => (
-                            <li key={brand} className="flex gap-2">
-                                <input
-                                    type="checkbox"
-                                    name="brand"
-                                    id={brand}
-                                    value={brand}
-                                    onChange={(e) =>
-                                        handleFilterSelected({
-                                            filter: "brand",
-                                            value: e.target.value,
-                                        })
-                                    }
-                                    checked={
-                                        localState.brand.includes(brand)
-                                            ? true
-                                            : false
-                                    }
-                                />
-                                <label
-                                    htmlFor={brand}
-                                    className="text-gray-600"
-                                >
-                                    {brand}
-                                </label>
-                            </li>
-                        ))}
+                        {additionalMobilesData?.brands?.length > 0 &&
+                            additionalMobilesData.brands.map(({ brand }) => (
+                                <li key={brand} className="flex gap-2">
+                                    <input
+                                        type="checkbox"
+                                        name="brand"
+                                        id={brand}
+                                        value={brand}
+                                        onChange={(e) =>
+                                            handleFilterSelected({
+                                                filter: "brand",
+                                                value: e.target.value,
+                                            })
+                                        }
+                                        checked={
+                                            localState.brand.includes(brand)
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                    <label
+                                        htmlFor={brand}
+                                        className="text-gray-600"
+                                    >
+                                        {brand}
+                                    </label>
+                                </li>
+                            ))}
                     </ul>
                 </section>
 
@@ -303,33 +304,38 @@ export default function Aside({ additionalMobilesData }) {
                         Chipset
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData.chipsets.map(({ chipset }) => (
-                            <li key={chipset} className="flex gap-2">
-                                <input
-                                    type="checkbox"
-                                    name="chipset"
-                                    id={chipset}
-                                    value={chipset}
-                                    onChange={(e) =>
-                                        handleFilterSelected({
-                                            filter: "chipset",
-                                            value: e.target.value,
-                                        })
-                                    }
-                                    checked={
-                                        localState.chipset.includes(chipset)
-                                            ? true
-                                            : false
-                                    }
-                                />
-                                <label
-                                    htmlFor={chipset}
-                                    className="text-gray-600"
-                                >
-                                    {chipset}
-                                </label>
-                            </li>
-                        ))}
+                        {additionalMobilesData?.chipset?.length > 0 &&
+                            additionalMobilesData.chipsets.map(
+                                ({ chipset }) => (
+                                    <li key={chipset} className="flex gap-2">
+                                        <input
+                                            type="checkbox"
+                                            name="chipset"
+                                            id={chipset}
+                                            value={chipset}
+                                            onChange={(e) =>
+                                                handleFilterSelected({
+                                                    filter: "chipset",
+                                                    value: e.target.value,
+                                                })
+                                            }
+                                            checked={
+                                                localState.chipset.includes(
+                                                    chipset
+                                                )
+                                                    ? true
+                                                    : false
+                                            }
+                                        />
+                                        <label
+                                            htmlFor={chipset}
+                                            className="text-gray-600"
+                                        >
+                                            {chipset}
+                                        </label>
+                                    </li>
+                                )
+                            )}
                     </ul>
                 </section>
 
@@ -454,35 +460,36 @@ export default function Aside({ additionalMobilesData }) {
                         Network
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData.network.map(({ network }) => (
-                            <li key={network} className="flex gap-2">
-                                <input
-                                    type="checkbox"
-                                    name="network"
-                                    id={network}
-                                    value={network}
-                                    onChange={(e) =>
-                                        handleFilterSelected({
-                                            filter: "network",
-                                            value: e.target.value,
-                                        })
-                                    }
-                                    checked={
-                                        localState.network.includes(network)
-                                            ? true
-                                            : false
-                                    }
-                                />
-                                <label
-                                    htmlFor={network}
-                                    className="text-gray-600 uppercase"
-                                >
-                                    {isNaN(parseInt(network))
-                                        ? network
-                                        : network + "G"}
-                                </label>
-                            </li>
-                        ))}
+                        {additionalMobilesData?.network?.length > 0 &&
+                            additionalMobilesData.network.map(({ network }) => (
+                                <li key={network} className="flex gap-2">
+                                    <input
+                                        type="checkbox"
+                                        name="network"
+                                        id={network}
+                                        value={network}
+                                        onChange={(e) =>
+                                            handleFilterSelected({
+                                                filter: "network",
+                                                value: e.target.value,
+                                            })
+                                        }
+                                        checked={
+                                            localState.network.includes(network)
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                    <label
+                                        htmlFor={network}
+                                        className="text-gray-600 uppercase"
+                                    >
+                                        {isNaN(parseInt(network))
+                                            ? network
+                                            : network + "G"}
+                                    </label>
+                                </li>
+                            ))}
                     </ul>
                 </section>
 

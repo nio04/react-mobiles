@@ -3,7 +3,7 @@ import React from "react";
 import Nav from "./layouts/Nav";
 import Aside from "./layouts/Aside";
 import Main from "./layouts/Main";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 function App() {
     const { mobiles, additionalMobilesData } = useLoaderData();

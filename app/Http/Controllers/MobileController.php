@@ -56,13 +56,6 @@ class MobileController extends Controller {
         }
 
         return response()->json($mobiles->simplePaginate($request->input("listings") ?? "20"));
-
-        // filtering
-        // if ($request->input("brand")) {
-        //     logger("test", [$request->input("listings")]);
-        //     $mobiles = Mobile::where("name", "like", "%" . $request->input("q") ?? "" . "%")->whereIn('brand', $brandRequest)->orderBy("price", ($request->input("sortBy") === "default" || $request->input("sortBy") === "low_to_high") ? "asc" : "desc")->simplePaginate($request->input("listings"));
-        // }
-        // return ['mobiles' => $mobiles];
     }
 
     function loadAdditionalData() {
