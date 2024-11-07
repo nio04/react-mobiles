@@ -19,17 +19,20 @@ root.render(<RouterProvider router={router} />);
 
 async function dataLoading({ request }) {
     const url = new URL(request.url);
+    const filterQuery = `brand=${url.searchParams.get("brand") || ""}&chipset=${
+        url.searchParams.get("chipset") || ""
+    }network=${url.searchParams.get("network") || ""}&listings=${
+        url.searchParams.get("listings") || "20"
+    }`;
+    const defaultQuery = `&listings=${
+        url.searchParams.get("listings") || "20"
+    }&sortBy=${url.searchParams.get("sortBy") || "default"}`;
+    const searchQuery = `&q=${url.searchParams.get("q") || ""}`;
+
     const searchParams = url.search
-        ? `brand=${url.searchParams.get("brand") ?? ""}&chipset=${
-              url.searchParams.get("chipset") ?? ""
-          }&network=${url.searchParams.get("network") ?? ""}&listings=${
-              url.searchParams.get("listings") ?? "20"
-          }&sortBy=${url.searchParams.get("sortBy") ?? "default"}&q=${
-              url.searchParams.get("q") ?? ""
-          }`
+        ? `${filterQuery}${defaultQuery}${searchQuery}`
         : new URLSearchParams(url.search);
 
-    // console.log(url);
     try {
         const mobilesListingResponse = await axios(
             `http://127.0.0.1:8000/api/mobiles?${searchParams}`

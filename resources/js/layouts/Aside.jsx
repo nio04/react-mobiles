@@ -4,76 +4,39 @@ import { useSearchParams } from "react-router-dom";
 export default function Aside({ additionalMobilesData }) {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [brandQuery, setBrandQuery] = useState(
-        searchParams.get("brand") || []
-    );
-    const [chipsetQuery, setChipsetQuery] = useState(
-        searchParams.get("chipset") || []
-    );
-    const [networkQuery, setNetworkQuery] = useState(
-        searchParams.get("network") || []
-    );
+    const [localState, setLocalState] = useState({
+        brand: searchParams.get("brand")
+            ? searchParams.get("brand").split(",")
+            : [],
+        chipset: searchParams.get("chipset")
+            ? searchParams.get("chipset").split(",")
+            : [],
+        network: searchParams.get("network")
+            ? searchParams.get("network").split(",")
+            : [],
+    });
 
     // when an item is checked-unchecked for filter
     function handleFilterSelected({ filter, value }) {
-        if (filter === "brand") {
-            setBrandQuery((old) =>
-                old.includes(value)
-                    ? old.filter((item) => item !== value)
-                    : [...old, value]
-            );
-        }
-        if (filter === "chipset") {
-            setChipsetQuery((old) =>
-                old.includes(value)
-                    ? old.filter((item) => item !== value)
-                    : [...old, value]
-            );
-        }
-        if (filter === "network") {
-            setNetworkQuery((old) =>
-                old.includes(value)
-                    ? old.filter((item) => item !== value)
-                    : [...old, value]
-            );
-        }
+        setLocalState((old) => {
+            return {
+                ...old,
+                [filter]: old[filter].includes(value)
+                    ? old[filter].filter((el) => el !== value)
+                    : [...old[filter], value],
+            };
+        });
     }
 
-    // when an item is select, we update the query string.
-    // we are listening for the filter state to change
     useEffect(() => {
-        if ([...brandQuery, ...chipsetQuery, ...networkQuery].length < 1)
-            return;
+        const brand = localState.brand.join(",");
+        const chipset = localState.chipset.join(",");
+        const network = localState.network.join(",");
 
-        if (
-            [
-                { key: "brand", value: brandQuery },
-                { key: "chipset", value: chipsetQuery },
-                { key: "network", value: networkQuery },
-            ].every((item) => item.value === searchParams.get(item.key))
-        ) {
-            return;
-        }
-
-        setSearchParams({
-            brand: brandQuery.toString(),
-            chipset: chipsetQuery.toString(),
-            network: networkQuery.toString(),
-        });
-
+        if (brand === "" && chipset === "" && network === "") return;
+        setSearchParams({ ...localState });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [brandQuery, chipsetQuery, networkQuery]);
-
-    // on component mount, we check if we have the specific query string exists!
-    // if exist, then we set the value on the state
-    useEffect(() => {
-        searchParams.has("brand") &&
-            setBrandQuery(searchParams.get("brand").split(","));
-
-        searchParams.has("chipset") &&
-            setChipsetQuery(searchParams.get("chipset").split(","));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [localState]);
 
     return (
         <>
@@ -129,7 +92,7 @@ export default function Aside({ additionalMobilesData }) {
                                         })
                                     }
                                     checked={
-                                        brandQuery.includes(brand)
+                                        localState.brand.includes(brand)
                                             ? true
                                             : false
                                     }
@@ -354,7 +317,7 @@ export default function Aside({ additionalMobilesData }) {
                                         })
                                     }
                                     checked={
-                                        chipsetQuery.includes(chipset)
+                                        localState.chipset.includes(chipset)
                                             ? true
                                             : false
                                     }
@@ -505,7 +468,7 @@ export default function Aside({ additionalMobilesData }) {
                                         })
                                     }
                                     checked={
-                                        networkQuery.includes(network)
+                                        localState.network.includes(network)
                                             ? true
                                             : false
                                     }

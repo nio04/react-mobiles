@@ -5,12 +5,16 @@ export default function TopActions() {
 
     function handleShowListings(e) {
         const value = e.target.value;
+        if (!value) return;
+
         searchParams.set("listings", value);
         setSearchParams(searchParams);
     }
 
     function handleSortings(e) {
         const value = e.target.value;
+        if (!value) return;
+
         searchParams.set("sortBy", value);
         setSearchParams(searchParams);
     }
