@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mobile;
+use App\Services\MobileFilterService;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 
 class MobileController extends Controller {
@@ -13,70 +15,58 @@ class MobileController extends Controller {
     public function index(Request $request) {
         $mobiles = Mobile::query();
 
-        $query = $request->input("q") ?? "";
-        $sortBy = $request->input("sortBy") ?? "default";
-        $listings = $request->input("listings") ?? "20";
-        $brandRequest = $request->input("brand") ?? "";
-        $chipsetRequest = $request->input("chipset") ?? "";
-        $networkRequest = $request->input("network") ?? "";
+        $mobiles = $this->applyFilters($mobiles, $request);
+        $mobiles = $this->applySorting($mobiles, $request);
+        $paginate = $this->applyPagination($mobiles, $request->input("listings", 20));
 
-        if (!empty($query)) {
-            $mobiles->where(
-                "name",
-                "like",
-                "%" . $query ?? "" . "%"
-            );
-        }
-        if (!empty($sortBy)) {
-            $mobiles->orderBy(
-                "price",
-                ($sortBy === "default" ||
-                    $sortBy === "low_to_high")
-                    ? "asc" : "desc"
-            );
-        }
-        if (!empty($listings)) {
-            $mobiles->simplePaginate($listings);
-        }
-
-        // filterings
-        if (!empty($brandRequest)) {
-            $brandInput = explode(",", $request->input("brand"));
-            $mobiles->whereIn("brand", $brandInput);
-        }
-
-        if (!empty($chipsetRequest)) {
-            $chipsetInput = explode(",", $request->input("chipset"));
-            $mobiles->whereIn("chipset", $chipsetInput);
-        }
-
-        if (!empty($networkRequest)) {
-            $networkInput = explode(",", $request->input("network"));
-            $mobiles->whereIn("network", $networkInput);
-        }
-
-        return response()->json($mobiles->paginate($request->input("listings") ?? "20"));
+        return $paginate;
     }
 
-    function loadAdditionalData() {
-        $brands = Mobile::select("brand")->distinct()->get();
-        $chipsets = Mobile::select("chipset")->distinct()->get();
-        $displayTypes = Mobile::select("display_type")->distinct()->get();
-        $status = Mobile::select("status")->distinct()->get();
-        $networkTypes = Mobile::select("network")->distinct()->get();
-        $os = Mobile::select("os")->distinct()->get();
-        $ram = Mobile::select("ram")->distinct()->get();
-        $storage = Mobile::select("storage")->distinct()->get();
-
-        return [
-            'brands' => $brands,
-            "chipsets" => $chipsets,
-            "display" => $displayTypes,
-            "status" => $status,
-            "network" => $networkTypes,
-            "os" => $os,
-            "ram" => $ram,
-            "storage" => $storage,
+    protected function applyFilters($query, Request $request) {
+        $filterableFields = [
+            "brand",
+            "chipset",
+            "network",
+            "os",
+            "ram",
+            "storage",
+            "status",
+            "display_type",
+            "refresh_rate",
+            "camera",
+            "battery_type"
         ];
+
+        foreach ($filterableFields as $field) {
+            $items = $request->input($field);
+
+            if (!empty($items)) {
+                $itemCollections = explode(",", $items);
+                $query->whereIn($field, $itemCollections);
+            }
+
+            if ($searchQuery = $request->input('q')) {
+                $query->where('name', 'like', '%' . $searchQuery . '%');
+            }
+            return $query;
+        }
+    }
+
+    protected function applySorting($query, $sortBy) {
+        if (!$sortBy || $sortBy === "default" || $sortBy === "low_to_high") {
+            return $query->orderBy('price', 'asc');
+        } elseif ($sortBy === 'high_to_low') {
+            return $query->orderBy('price', 'desc');
+        }
+
+        return $query;
+    }
+
+    protected function applyPagination($query, $listings) {
+        return $query->paginate($listings);
+    }
+
+    public function loadAdditionalData() {
+        return response()->json(MobileFilterService::getStaticFilterData());
     }
 }

@@ -19,7 +19,6 @@ const router = createBrowserRouter([
 root.render(<RouterProvider router={router} />);
 
 async function additionalMobilesDataFn() {
-    console.log(cachedAdditionalMobilesData);
     if (cachedAdditionalMobilesData) return;
     try {
         const response = await axios("http://127.0.0.1:8000/api/mobiles-data");
@@ -33,7 +32,19 @@ async function additionalMobilesDataFn() {
 
 async function dataLoading({ request }) {
     const url = new URL(request.url);
-    const filterKeys = ["brand", "chipset", "network"];
+    const filterKeys = [
+        "brand",
+        "chipset",
+        "network",
+        "os",
+        "ram",
+        "storage",
+        "status",
+        "display",
+        "refresh",
+        "camera",
+        "batteryType",
+    ];
     const defaultParams = { listings: 20, sortBy: "default" };
     const searchQuery = `&q=${url.searchParams.get("q") || ""}`;
     const filterQuery = filterKeys
@@ -49,7 +60,7 @@ async function dataLoading({ request }) {
             axios(`http://127.0.0.1:8000/api/mobiles?${searchParams}`),
             additionalMobilesDataFn(),
         ]);
-
+        console.log(cachedAdditionalMobilesData);
         return {
             mobiles: mobiles.data,
             additionalMobilesData: cachedAdditionalMobilesData

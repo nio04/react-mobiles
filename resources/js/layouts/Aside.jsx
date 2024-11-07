@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-const filterKeys = ["brand", "chipset", "network"];
+
+const filterKeys = [
+    "brand",
+    "chipset",
+    "network",
+    "os",
+    "ram",
+    "storage",
+    "status",
+    "display",
+    "refresh",
+    "camera",
+    "batteryType",
+];
 
 const initState = (searchParams) => {
     return filterKeys.reduce((acc, key) => {
@@ -11,7 +24,8 @@ const initState = (searchParams) => {
     }, {});
 };
 
-export default function Aside({ additionalMobilesData = [] }) {
+export default function Aside({ additionalMobilesData }) {
+    // console.log(additionalMobilesData);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [localState, setLocalState] = useState(() => initState(searchParams));
@@ -90,8 +104,8 @@ export default function Aside({ additionalMobilesData = [] }) {
                     </label>
 
                     <ul className="h-32 pl-3 overflow-y-scroll mt- min-w-44 max-w-48">
-                        {additionalMobilesData?.brands?.length > 0 &&
-                            additionalMobilesData.brands.map(({ brand }) => (
+                        {additionalMobilesData.brands.length > 0 ? (
+                            additionalMobilesData.brands.map((brand) => (
                                 <li key={brand} className="flex gap-2">
                                     <input
                                         type="checkbox"
@@ -117,7 +131,10 @@ export default function Aside({ additionalMobilesData = [] }) {
                                         {brand}
                                     </label>
                                 </li>
-                            ))}
+                            ))
+                        ) : (
+                            <p>Loading data...</p>
+                        )}
                     </ul>
                 </section>
 
@@ -209,106 +226,80 @@ export default function Aside({ additionalMobilesData = [] }) {
                 </section> */}
 
                 {/* Battery Type */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Battery Type
                     </h4>
-                    <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="battery_type"
-                                id="battery_type_lipo"
-                                value="Lithium Polymer (Li-Po)"
-                            />
-                            <label
-                                htmlFor="battery_type_lipo"
-                                className="text-gray-600"
-                            >
-                                Lithium Polymer (Li-Po)
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="battery_type"
-                                id="battery_type_lion"
-                                value="Lithium-ion (Li-Ion)"
-                            />
-                            <label
-                                htmlFor="battery_type_lion"
-                                className="text-gray-600"
-                            >
-                                Lithium-ion (Li-Ion)
-                            </label>
-                        </li>
+                    <ul className="pl-2 space-y-2">
+                        {additionalMobilesData.battery_type.map(
+                            (batteryType) => (
+                                <li key={batteryType} className="flex gap-4">
+                                    <input
+                                        type="checkbox"
+                                        name="batteryType"
+                                        id={batteryType}
+                                        value={batteryType}
+                                        onChange={(e) =>
+                                            handleFilterSelected({
+                                                filter: "batteryType",
+                                                value: e.target.value,
+                                            })
+                                        }
+                                        checked={
+                                            localState.batteryType.includes(
+                                                batteryType
+                                            )
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                    <label
+                                        htmlFor={batteryType}
+                                        className="text-sm text-gray-600 uppercase max-w-32"
+                                    >
+                                        {batteryType}
+                                    </label>
+                                </li>
+                            )
+                        )}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* Camera */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Camera
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="camera"
-                                id="camera_12_20"
-                                value="camera_12_20"
-                            />
-                            <label
-                                htmlFor="camera_12_20"
-                                className="text-gray-600"
-                            >
-                                12Mp ~ 20MP
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="camera"
-                                id="camera_48"
-                                value="camera_48"
-                            />
-                            <label
-                                htmlFor="camera_48"
-                                className="text-gray-600"
-                            >
-                                48MP
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="camera"
-                                id="camera_64"
-                                value="camera_64"
-                            />
-                            <label
-                                htmlFor="camera_64"
-                                className="text-gray-600"
-                            >
-                                64MP
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="camera"
-                                id="camera_200"
-                                value="camera_200"
-                            />
-                            <label
-                                htmlFor="camera_200"
-                                className="text-gray-600"
-                            >
-                                200MP
-                            </label>
-                        </li>
+                        {additionalMobilesData.camera.map((camera) => (
+                            <li key={camera} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="camera"
+                                    id={camera}
+                                    value={camera}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "camera",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.camera.includes(camera)
+                                            ? true
+                                            : false
+                                    }
+                                />
+                                <label
+                                    htmlFor={camera}
+                                    className="text-gray-600 uppercase"
+                                >
+                                    {camera} MP
+                                </label>
+                            </li>
+                        ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* Chipset */}
                 <section className="flex flex-col gap-3 mb-2">
@@ -317,143 +308,132 @@ export default function Aside({ additionalMobilesData = [] }) {
                     </h4>
                     <ul className="pl-2">
                         {additionalMobilesData?.chipsets?.length > 0 &&
-                            additionalMobilesData.chipsets.map(
-                                ({ chipset }) => (
-                                    <li key={chipset} className="flex gap-2">
-                                        <input
-                                            type="checkbox"
-                                            name="chipset"
-                                            id={chipset}
-                                            value={chipset}
-                                            onChange={(e) =>
-                                                handleFilterSelected({
-                                                    filter: "chipset",
-                                                    value: e.target.value,
-                                                })
-                                            }
-                                            checked={
-                                                localState.chipset.includes(
-                                                    chipset
-                                                )
-                                                    ? true
-                                                    : false
-                                            }
-                                        />
-                                        <label
-                                            htmlFor={chipset}
-                                            className="text-gray-600"
-                                        >
-                                            {chipset}
-                                        </label>
-                                    </li>
-                                )
-                            )}
+                            additionalMobilesData.chipsets.map((chipset) => (
+                                <li key={chipset} className="flex gap-2">
+                                    <input
+                                        type="checkbox"
+                                        name="chipset"
+                                        id={chipset}
+                                        value={chipset}
+                                        onChange={(e) =>
+                                            handleFilterSelected({
+                                                filter: "chipset",
+                                                value: e.target.value,
+                                            })
+                                        }
+                                        checked={
+                                            localState.chipset.includes(chipset)
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                    <label
+                                        htmlFor={chipset}
+                                        className="text-gray-600"
+                                    >
+                                        {chipset}
+                                    </label>
+                                </li>
+                            ))}
                     </ul>
                 </section>
 
                 {/* Refresh Rate */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Refresh Rate
                     </h4>
                     <ul className="pl-2">
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="refresh_rate"
-                                id="refresh_rate_60_90"
-                                value="refresh_rate_60_90"
-                            />
-                            <label
-                                htmlFor="refresh_rate_60_90"
-                                className="text-gray-600"
-                            >
-                                60Hz ~ 90Hz
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="refresh_rate"
-                                id="refresh_rate_120"
-                                value="120"
-                            />
-                            <label
-                                htmlFor="refresh_rate_120"
-                                className="text-gray-600"
-                            >
-                                120Hz
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="refresh_rate"
-                                id="refresh_rate_144"
-                                value="144"
-                            />
-                            <label
-                                htmlFor="refresh_rate_144"
-                                className="text-gray-600"
-                            >
-                                144Hz
-                            </label>
-                        </li>
-                        <li className="flex gap-2">
-                            <input
-                                type="checkbox"
-                                name="refresh_rate"
-                                id="refresh_rate_165"
-                                value="165"
-                            />
-                            <label
-                                htmlFor="refresh_rate_165"
-                                className="text-gray-600"
-                            >
-                                165Hz
-                            </label>
-                        </li>
-                    </ul>
-                </section> */}
-
-                {/* Dispaly Type */}
-                {/* <section className="flex flex-col gap-3 mb-2">
-                    <h4 className="text-2xl font-semibold text-gray-700">
-                        Display Type
-                    </h4>
-                    <ul className="pl-2">
-                        {displayTypeListings.map(({ display_type }) => (
-                            <li key={display_type} className="flex gap-2">
+                        {additionalMobilesData.refresh.map((refresh) => (
+                            <li key={refresh} className="flex gap-2">
                                 <input
                                     type="checkbox"
-                                    name="display_type"
-                                    id={display_type}
-                                    value={display_type}
+                                    name="refresh"
+                                    id={refresh}
+                                    value={refresh}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "refresh",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.refresh.includes(refresh)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
-                                    htmlFor={display_type}
+                                    htmlFor={refresh}
                                     className="text-gray-600 uppercase"
                                 >
-                                    {display_type}
+                                    {refresh} Hz
                                 </label>
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
+
+                {/* Dispaly Type */}
+                <section className="flex flex-col gap-3 mb-2">
+                    <h4 className="text-2xl font-semibold text-gray-700">
+                        camera Type
+                    </h4>
+                    <ul className="pl-2">
+                        {additionalMobilesData.display.map((display) => (
+                            <li key={display} className="flex gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="display"
+                                    id={display}
+                                    value={display}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "display",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.display.includes(display)
+                                            ? true
+                                            : false
+                                    }
+                                />
+                                <label
+                                    htmlFor={display}
+                                    className="text-gray-600 uppercase"
+                                >
+                                    {display}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
 
                 {/* Market Status */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         Market Status
                     </h4>
                     <ul className="pl-2">
-                        {marketStatusListings.map(({ status }) => (
+                        {additionalMobilesData.status.map((status) => (
                             <li key={status} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="status"
                                     id={status}
                                     value={status}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "status",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.status.includes(status)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={status}
@@ -464,7 +444,7 @@ export default function Aside({ additionalMobilesData = [] }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* Network */}
                 <section className="flex flex-col gap-3 mb-2">
@@ -472,8 +452,8 @@ export default function Aside({ additionalMobilesData = [] }) {
                         Network
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData?.network?.length > 0 &&
-                            additionalMobilesData.network.map(({ network }) => (
+                        {additionalMobilesData.network.length > 0 &&
+                            additionalMobilesData.network.map((network) => (
                                 <li key={network} className="flex gap-2">
                                     <input
                                         type="checkbox"
@@ -506,16 +486,27 @@ export default function Aside({ additionalMobilesData = [] }) {
                 </section>
 
                 {/* OS */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">OS</h4>
                     <ul className="pl-2">
-                        {osListings.map(({ os }) => (
+                        {additionalMobilesData.os.map((os) => (
                             <li key={os} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="os"
                                     id={os}
                                     value={os}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "os",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.os.includes(os)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={os}
@@ -526,21 +517,32 @@ export default function Aside({ additionalMobilesData = [] }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* RAM */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         RAM
                     </h4>
                     <ul className="pl-2">
-                        {ramListings.map(({ ram }) => (
+                        {additionalMobilesData.ram.map((ram) => (
                             <li key={ram} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="ram"
                                     id={ram}
                                     value={ram}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "ram",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.ram.includes(ram)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={ram}
@@ -551,21 +553,32 @@ export default function Aside({ additionalMobilesData = [] }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
 
                 {/* Storage */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <h4 className="text-2xl font-semibold text-gray-700">
                         storage
                     </h4>
                     <ul className="pl-2">
-                        {storageListings.map(({ storage }) => (
+                        {additionalMobilesData.storage.map((storage) => (
                             <li key={storage} className="flex gap-2">
                                 <input
                                     type="checkbox"
                                     name="storage"
                                     id={storage}
                                     value={storage}
+                                    onChange={(e) =>
+                                        handleFilterSelected({
+                                            filter: "storage",
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    checked={
+                                        localState.storage.includes(storage)
+                                            ? true
+                                            : false
+                                    }
                                 />
                                 <label
                                     htmlFor={storage}
@@ -576,7 +589,7 @@ export default function Aside({ additionalMobilesData = [] }) {
                             </li>
                         ))}
                     </ul>
-                </section> */}
+                </section>
             </aside>
         </>
     );
