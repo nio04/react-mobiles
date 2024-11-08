@@ -47,6 +47,10 @@ class MobileController extends Controller {
             }
         }
 
+        if ($searchQuery = $request->input('q')) {
+            $query->where('name', 'like', '%' . $searchQuery . '%');
+        }
+
         return $query;
     }
 

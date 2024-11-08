@@ -43,7 +43,7 @@ export default function Aside({ additionalMobilesData }) {
     }
 
     useEffect(() => {
-        // Check if localState matches searchParams
+        // Check if localState matches searchParams for filters
         const isMatchingSearchParams = filterKeys.every((key) => {
             const searchParamValue = searchParams.get(key) || "";
             const localStateValue = localState[key].join(",");
@@ -53,15 +53,17 @@ export default function Aside({ additionalMobilesData }) {
         // Early return if all key-value pairs match
         if (isMatchingSearchParams) return;
 
-        // Update URL search parameters based on the current localState
-        setSearchParams(
-            filterKeys.reduce((params, key) => {
-                if (localState[key].length) {
-                    params.set(key, localState[key].join(","));
-                }
-                return params;
-            }, new URLSearchParams())
-        );
+        const newParams = new URLSearchParams(searchParams);
+
+        filterKeys.forEach((key) => {
+            if (localState[key].length) {
+                newParams.set(key, localState[key].join(","));
+            } else {
+                newParams.delete(key);
+            }
+        });
+
+        setSearchParams(newParams);
     }, [localState, setSearchParams, searchParams]);
 
     return (

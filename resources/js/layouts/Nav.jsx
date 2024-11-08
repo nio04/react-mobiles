@@ -5,7 +5,7 @@ export default function Nav() {
 
     function handleQuery(e) {
         const value = e.target.value;
-        if (!value) return;
+        if (!value.length === 0) return;
 
         searchParams.set("q", value);
         setSearchParams(searchParams);
