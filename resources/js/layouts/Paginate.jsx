@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Paginate({ paginateData }) {
-    const { current_page, next_page_url, prev_page_url } = paginateData;
+    const { current_page, next_page_url, prev_page_url, last_page } =
+        paginateData;
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -13,7 +14,9 @@ export default function Paginate({ paginateData }) {
 
     return (
         <div className="flex items-center justify-between h-24 px-6 bg-gray-300">
-            <span className="text-gray-600">Page {current_page}</span>
+            <span className="text-gray-600">
+                Page {current_page} of {last_page}
+            </span>
 
             <div className="flex space-x-4">
                 {prev_page_url ? (

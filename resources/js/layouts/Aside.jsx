@@ -13,6 +13,8 @@ const filterKeys = [
     "refresh_rate",
     "camera",
     "battery_type",
+    "min_price",
+    "max_price",
 ];
 
 const initState = (searchParams) => {
@@ -25,7 +27,6 @@ const initState = (searchParams) => {
 };
 
 export default function Aside({ additionalMobilesData }) {
-    // console.log(additionalMobilesData);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [localState, setLocalState] = useState(() => initState(searchParams));
@@ -33,6 +34,13 @@ export default function Aside({ additionalMobilesData }) {
     // when an item is checked-unchecked for filter
     function handleFilterSelected({ filter, value }) {
         setLocalState((old) => {
+            if (filter === "min_price" || filter === "max_price") {
+                return {
+                    ...old,
+                    [filter]: [...value],
+                };
+            }
+
             return {
                 ...old,
                 [filter]: old[filter].includes(value)
@@ -49,7 +57,6 @@ export default function Aside({ additionalMobilesData }) {
             const localStateValue = localState[key].join(",");
             return searchParamValue === localStateValue;
         });
-
         // Early return if all key-value pairs match (no changes in filters)
         if (isMatchingSearchParams) return;
 
@@ -71,7 +78,7 @@ export default function Aside({ additionalMobilesData }) {
         <>
             <aside className="flex flex-col h-[630px] gap-2 px-3 py-6 overflow-y-scroll bg-gray-200 shrink-0 basis-60">
                 {/* Price range */}
-                {/* <section className="flex flex-col gap-3 mb-2">
+                <section className="flex flex-col gap-3 mb-2">
                     <label
                         htmlFor="min-price"
                         className="text-2xl font-semibold text-gray-700"
@@ -85,6 +92,15 @@ export default function Aside({ additionalMobilesData }) {
                             id="min-price"
                             placeholder="Enter Min Price Value"
                             className="h-8 pl-2 -mb-1"
+                            value={localState.min_price
+                                .join(",")
+                                .replaceAll(",", "")}
+                            onChange={(e) =>
+                                handleFilterSelected({
+                                    filter: "min_price",
+                                    value: e.target.value,
+                                })
+                            }
                         />
                         <p className="text-xl font-bold text-center">~</p>
                         <input
@@ -93,9 +109,18 @@ export default function Aside({ additionalMobilesData }) {
                             id="max-price"
                             placeholder="Enter Max Price Value"
                             className="h-8 pl-2 -mt-2"
+                            value={localState.max_price
+                                .join(",")
+                                .replaceAll(",", "")}
+                            onChange={(e) =>
+                                handleFilterSelected({
+                                    filter: "max_price",
+                                    value: e.target.value,
+                                })
+                            }
                         />
                     </div>
-                </section> */}
+                </section>
 
                 {/* Brand */}
                 <section className="flex flex-col gap-3 mb-2">

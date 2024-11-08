@@ -6,6 +6,7 @@ use App\Models\Mobile;
 use App\Services\MobileFilterService;
 use finfo;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Contracts\ControllerDispatcher;
 use Illuminate\Support\Facades\DB;
 
 class MobileController extends Controller {
@@ -35,11 +36,34 @@ class MobileController extends Controller {
             "display_type",
             "refresh_rate",
             "camera",
-            "battery_type"
+            "battery_type",
+            "min_price",
+            "max_price"
         ];
 
         foreach ($filterableFields as $field) {
             $values = $request->input($field);
+
+            if ($field === "min_price") continue;
+
+            if ($field === "max_price") {
+                if (empty($values)) return $query;
+
+                $query->whereBetween("price", [
+                    str_replace(
+                        ",",
+                        "",
+                        $request->input("min_price")
+                    ),
+                    str_replace(
+                        ",",
+                        "",
+                        $request->input("max_price")
+                    )
+                ]);
+
+                return $this->searchQuery($query, $request);
+            }
 
             if (!empty($values)) {
                 $valuesArray = explode(",", $values);
@@ -47,10 +71,7 @@ class MobileController extends Controller {
             }
         }
 
-        if ($searchQuery = $request->input('q')) {
-            $query->where('name', 'like', '%' . $searchQuery . '%');
-        }
-
+        return $this->searchQuery($query, $request);
         return $query;
     }
 
@@ -68,10 +89,17 @@ class MobileController extends Controller {
     }
 
     protected function applyPagination($query, $listings) {
-        return $query->simplePaginate($listings);
+        return $query->paginate($listings);
     }
 
     public function loadAdditionalData() {
         return response()->json(MobileFilterService::getStaticFilterData());
+    }
+
+    protected function searchQuery($query, Request $request) {
+        if ($q = $request->input('q')) {
+            return  $query->where('name', 'like', '%' . $q . '%');
+        }
+        return $query;
     }
 }

@@ -44,6 +44,8 @@ async function dataLoading({ request }) {
         "refresh_rate",
         "camera",
         "battery_type",
+        "min_price",
+        "max_price",
     ];
     const defaultParams = {
         listings: url.searchParams.get("listings") || 20,
@@ -64,7 +66,6 @@ async function dataLoading({ request }) {
             axios(`http://127.0.0.1:8000/api/mobiles?${searchParams}`),
             additionalMobilesDataFn(),
         ]);
-        console.log(cachedAdditionalMobilesData);
         return {
             mobiles: mobiles.data,
             additionalMobilesData: cachedAdditionalMobilesData
