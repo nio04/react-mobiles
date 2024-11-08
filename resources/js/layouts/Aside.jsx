@@ -9,10 +9,10 @@ const filterKeys = [
     "ram",
     "storage",
     "status",
-    "display",
-    "refresh",
+    "display_type",
+    "refresh_rate",
     "camera",
-    "batteryType",
+    "battery_type",
 ];
 
 const initState = (searchParams) => {
@@ -232,32 +232,32 @@ export default function Aside({ additionalMobilesData }) {
                     </h4>
                     <ul className="pl-2 space-y-2">
                         {additionalMobilesData.battery_type.map(
-                            (batteryType) => (
-                                <li key={batteryType} className="flex gap-4">
+                            (battery_type) => (
+                                <li key={battery_type} className="flex gap-4">
                                     <input
                                         type="checkbox"
-                                        name="batteryType"
-                                        id={batteryType}
-                                        value={batteryType}
+                                        name="battery_type"
+                                        id={battery_type}
+                                        value={battery_type}
                                         onChange={(e) =>
                                             handleFilterSelected({
-                                                filter: "batteryType",
+                                                filter: "battery_type",
                                                 value: e.target.value,
                                             })
                                         }
                                         checked={
-                                            localState.batteryType.includes(
-                                                batteryType
+                                            localState.battery_type.includes(
+                                                battery_type
                                             )
                                                 ? true
                                                 : false
                                         }
                                     />
                                     <label
-                                        htmlFor={batteryType}
+                                        htmlFor={battery_type}
                                         className="text-sm text-gray-600 uppercase max-w-32"
                                     >
-                                        {batteryType}
+                                        {battery_type}
                                     </label>
                                 </li>
                             )
@@ -344,7 +344,7 @@ export default function Aside({ additionalMobilesData }) {
                         Refresh Rate
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData.refresh.map((refresh) => (
+                        {additionalMobilesData.refresh_rate.map((refresh) => (
                             <li key={refresh} className="flex gap-2">
                                 <input
                                     type="checkbox"
@@ -353,12 +353,14 @@ export default function Aside({ additionalMobilesData }) {
                                     value={refresh}
                                     onChange={(e) =>
                                         handleFilterSelected({
-                                            filter: "refresh",
+                                            filter: "refresh_rate",
                                             value: e.target.value,
                                         })
                                     }
                                     checked={
-                                        localState.refresh.includes(refresh)
+                                        localState.refresh_rate.includes(
+                                            refresh
+                                        )
                                             ? true
                                             : false
                                     }
@@ -380,7 +382,7 @@ export default function Aside({ additionalMobilesData }) {
                         camera Type
                     </h4>
                     <ul className="pl-2">
-                        {additionalMobilesData.display.map((display) => (
+                        {additionalMobilesData.display_type.map((display) => (
                             <li key={display} className="flex gap-2">
                                 <input
                                     type="checkbox"
@@ -389,12 +391,14 @@ export default function Aside({ additionalMobilesData }) {
                                     value={display}
                                     onChange={(e) =>
                                         handleFilterSelected({
-                                            filter: "display",
+                                            filter: "display_type",
                                             value: e.target.value,
                                         })
                                     }
                                     checked={
-                                        localState.display.includes(display)
+                                        localState.display_type.includes(
+                                            display
+                                        )
                                             ? true
                                             : false
                                     }

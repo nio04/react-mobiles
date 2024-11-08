@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Mobile;
 use App\Services\MobileFilterService;
-use Illuminate\Contracts\Pagination\Paginator;
+use finfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MobileController extends Controller {
 
@@ -38,21 +39,21 @@ class MobileController extends Controller {
         ];
 
         foreach ($filterableFields as $field) {
-            $items = $request->input($field);
+            $values = $request->input($field);
 
-            if (!empty($items)) {
-                $itemCollections = explode(",", $items);
-                $query->whereIn($field, $itemCollections);
+            if (!empty($values)) {
+                $valuesArray = explode(",", $values);
+                $query->whereIn($field, $valuesArray);
             }
-
-            if ($searchQuery = $request->input('q')) {
-                $query->where('name', 'like', '%' . $searchQuery . '%');
-            }
-            return $query;
         }
+
+        return $query;
     }
 
-    protected function applySorting($query, $sortBy) {
+
+    protected function applySorting($query, $request) {
+        $sortBy = $request->input("sortBy");
+
         if (!$sortBy || $sortBy === "default" || $sortBy === "low_to_high") {
             return $query->orderBy('price', 'asc');
         } elseif ($sortBy === 'high_to_low') {

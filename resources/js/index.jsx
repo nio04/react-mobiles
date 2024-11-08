@@ -40,12 +40,15 @@ async function dataLoading({ request }) {
         "ram",
         "storage",
         "status",
-        "display",
-        "refresh",
+        "display_type",
+        "refresh_rate",
         "camera",
-        "batteryType",
+        "battery_type",
     ];
-    const defaultParams = { listings: 20, sortBy: "default" };
+    const defaultParams = {
+        listings: url.searchParams.get("listings") || 20,
+        sortBy: url.searchParams.get("sortBy") || "default",
+    };
     const searchQuery = `&q=${url.searchParams.get("q") || ""}`;
     const filterQuery = filterKeys
         .map((item) => `${item}=${url.searchParams.getAll(item) || ""}`)
