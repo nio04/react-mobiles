@@ -68,7 +68,7 @@ class MobileController extends Controller {
     }
 
     protected function applyPagination($query, $listings) {
-        return $query->paginate($listings);
+        return $query->simplePaginate($listings);
     }
 
     public function loadAdditionalData() {

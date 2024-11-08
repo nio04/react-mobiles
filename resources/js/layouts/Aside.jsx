@@ -50,7 +50,7 @@ export default function Aside({ additionalMobilesData }) {
             return searchParamValue === localStateValue;
         });
 
-        // Early return if all key-value pairs match
+        // Early return if all key-value pairs match (no changes in filters)
         if (isMatchingSearchParams) return;
 
         const newParams = new URLSearchParams(searchParams);
@@ -63,6 +63,7 @@ export default function Aside({ additionalMobilesData }) {
             }
         });
 
+        newParams.set("page", "1");
         setSearchParams(newParams);
     }, [localState, setSearchParams, searchParams]);
 

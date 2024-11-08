@@ -48,6 +48,7 @@ async function dataLoading({ request }) {
     const defaultParams = {
         listings: url.searchParams.get("listings") || 20,
         sortBy: url.searchParams.get("sortBy") || "default",
+        page: url.searchParams.get("page") || 1,
     };
     const searchQuery = `&q=${url.searchParams.get("q") || ""}`;
     const filterQuery = filterKeys
