@@ -22,9 +22,7 @@ class MobileFilterService {
       'status' => Mobile::select('status')
         ->distinct()
         ->pluck('status'),
-      'network' => Mobile::select('network')
-        ->distinct()
-        ->pluck('network'),
+      'network' => ['3', '4', '5', 'WIFI'],
       'os' => Mobile::select('os')
         ->distinct()
         ->pluck('os'),

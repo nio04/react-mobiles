@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mobile;
 use App\Services\MobileFilterService;
-use finfo;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Contracts\ControllerDispatcher;
-use Illuminate\Support\Facades\DB;
 
 class MobileController extends Controller {
 
@@ -17,6 +14,7 @@ class MobileController extends Controller {
     public function index(Request $request) {
         $mobiles = Mobile::query();
 
+        $mobiles = $this->searchQuery($mobiles, $request);
         $mobiles = $this->applyFilters($mobiles, $request);
         $mobiles = $this->applySorting($mobiles, $request);
         $paginate = $this->applyPagination($mobiles, $request->input("listings", 20));
@@ -25,6 +23,7 @@ class MobileController extends Controller {
     }
 
     protected function applyFilters($query, Request $request) {
+        // List of filterable fields
         $filterableFields = [
             "brand",
             "chipset",
@@ -41,39 +40,57 @@ class MobileController extends Controller {
             "max_price"
         ];
 
+        // Loop through each filterable field
         foreach ($filterableFields as $field) {
             $values = $request->input($field);
 
-            if ($field === "min_price") continue;
+            // Handle the 'network' filter
+            if ($field === "network" && !empty($values)) {
+                $values = explode(',', $values); // Split into array if multiple values provided
 
-            if ($field === "max_price") {
-                if (empty($values)) return $query;
+                foreach ($values as $value) {
+                    $value = trim($value); // Trim any surrounding spaces
 
-                $query->whereBetween("price", [
-                    str_replace(
-                        ",",
-                        "",
-                        $request->input("min_price")
-                    ),
-                    str_replace(
-                        ",",
-                        "",
-                        $request->input("max_price")
-                    )
-                ]);
-
-                return $this->searchQuery($query, $request);
+                    // Check for 'wifi' specifically and apply LIKE query
+                    if (strtolower($value) == 'wifi') {
+                        $query->whereRaw("network LIKE '%WIFI%'");
+                    } else {
+                        $query->orWhere(function ($query) use ($value) {
+                            $query->where('network', 'like', "%$value%");
+                        });
+                    }
+                }
             }
 
-            if (!empty($values)) {
+            $minPrice = str_replace(",", "", $request->input("min_price"));
+            $maxPrice = str_replace(",", "", $request->input("max_price"));
+
+            // Case 1: Min price only (user provided min price, no max price)
+            if (!empty($minPrice) && empty($maxPrice)) {
+                $query->where("price", ">=", $minPrice);
+            }
+
+            // Case 2: Max price only (user provided max price, no min price)
+            if (empty($minPrice) && !empty($maxPrice)) {
+                $query->where("price", "<=", $maxPrice);
+            }
+
+            // Case 3: Both min_price and max_price provided (price range)
+            if (!empty($minPrice) && !empty($maxPrice)) {
+                $query->whereBetween("price", [$minPrice, $maxPrice]);
+            }
+
+            // Apply 'in' filter for other fields
+            if (!empty($values) && $field !== "min_price" && $field !== "max_price") {
                 $valuesArray = explode(",", $values);
                 $query->whereIn($field, $valuesArray);
             }
         }
 
+        // Final search query processing
         return $this->searchQuery($query, $request);
-        return $query;
     }
+
 
 
     protected function applySorting($query, $request) {
