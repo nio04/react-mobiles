@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { NumberFormatBase, NumericFormat } from "react-number-format";
 import { useSearchParams } from "react-router-dom";
 
 const filterKeys = [
@@ -86,7 +87,9 @@ export default function Aside({ additionalMobilesData }) {
                         Enter Min-Max Price
                     </label>
                     <div className="flex flex-col gap-1">
-                        <input
+                        <NumericFormat
+                            thousandsGroupStyle="lakh"
+                            thousandSeparator=","
                             type="text"
                             name="min-price"
                             id="min-price"
@@ -103,7 +106,9 @@ export default function Aside({ additionalMobilesData }) {
                             }
                         />
                         <p className="text-xl font-bold text-center">~</p>
-                        <input
+                        <NumericFormat
+                            thousandsGroupStyle="lakh"
+                            thousandSeparator=","
                             type="text"
                             name="max-price"
                             id="max-price"
